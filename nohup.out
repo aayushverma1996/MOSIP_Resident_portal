@@ -1,0 +1,4 @@
+[19020:19020:0428/193417.986908:ERROR:sandbox_linux.cc(372)] InitializeSandbox() called with multiple threads in process gpu-process.
+[19054:1:0428/193420.574245:ERROR:child_process_sandbox_support_impl_linux.cc(79)] FontService unique font name matching request did not receive a response.
+[19054:1:0428/193420.578039:ERROR:child_process_sandbox_support_impl_linux.cc(79)] FontService unique font name matching request did not receive a response.
+Fontconfig error: Cannot load default config file
