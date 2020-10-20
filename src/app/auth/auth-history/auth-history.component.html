@@ -1,0 +1,114 @@
+
+<div class="wrapper spacing" *ngIf="showSpinner">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div *ngIf="!showSpinner" class="wrapper">
+  <div class="form_wrapper">
+    <div class="heading">
+      <span>{{ 'authCommonText.text' | translate }}</span>
+    </div>
+
+    
+      <div class="subHeading pinkText">
+      {{ 'authHistory.sub_text' | translate }} <span class="boldText"> {{ 'authHistory.sub_text_UID' | translate}} </span> 
+      </div> 
+    <div
+      style="width: 38vw; max-width: 323px;"
+      [ngClass]="selectedLanguage !== 'Arabic' ? 'form_fields_wrapper form_fields_padding' : 'form_fields_wrapper'"
+    >
+
+    <div >
+      <mat-radio-group
+      aria-labelledby="example-radio-group-label"
+      class="radio-group"
+      [(ngModel)]="idType" style="flex-direction: column;">
+      <mat-radio-button value="UIN">{{ 'authCommonText.uin' | translate }}</mat-radio-button>
+      <mat-radio-button value="VID">{{ 'authCommonText.vid' | translate }}</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+    <div *ngIf="showDetail">
+      <div [dir]="textDir" *ngIf="(idType === 'VID')">
+        <mat-form-field appearance="outline">
+          <input
+            class="input_pri"
+            autofocus="autofocus"
+            matInput
+            [(ngModel)]="inputDetails" 
+            placeholder="{{ 'authHistory.enter_vid' | translate }}"
+            id="inputField"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <div [dir]="textDir" *ngIf="(idType === 'UIN')">
+        <mat-form-field appearance="outline">
+          <input
+            class="input_pri"
+            autofocus="autofocus"
+            matInput
+            [(ngModel)]="inputDetails" 
+            placeholder="{{ 'authHistory.enter_uin' | translate }}"
+            id="inputField"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </div>
+
+
+      <div *ngIf="showOTP">
+        <mat-form-field appearance="outline">
+          <input
+            autofocus="autofocus"
+            matInput
+            [(ngModel)]="inputOTP"
+            placeholder="{{ 'authCommonText.label_otp' | translate }}"
+            id="inputFieldOTP"
+            (input)="showVerifyBtn()"
+          />
+        </mat-form-field>
+      </div>
+
+      <!-- class="pinkBg whiteText boldText" -->
+      <div *ngIf="showSendOTP">
+        <button
+          mat-raised-button
+          class="btn_axn-pri"
+          [disabled]="inputDetails.length > 0 ? false : true"
+          (click)="submit()"
+        >
+          {{ 'authCommonText.action_send' | translate }}
+        </button>
+      </div>
+
+      <div *ngIf="showVerify">
+        <button
+          mat-raised-button
+          class="btn_axn-pri"
+          [disabled]="disableVerify"
+          disabled="{{ disableBtn }}"
+          (click)="submit()"
+        >
+          {{ 'authCommonText.action_verify' | translate }}
+        </button>
+      </div>
+
+      <div *ngIf="showResend ">
+        <button mat-raised-button class="btn_axn-pri" disabled="{{ disableBtn }}" (click)="submit()">
+          {{ 'authCommonText.action_resend' | translate }}
+        </button>
+      </div>
+
+      <div class="pinkText boldText" id="timer" >
+        <span>{{ 'authCommonText.otp_valid_label' | translate }}&nbsp;</span><span id="minutesSpan">{{ minutes }}</span
+        >:<span id="secondsSpan">{{ seconds }}</span>
+      </div>
+
+
+    </div>
+    
+  </div>
+</div>

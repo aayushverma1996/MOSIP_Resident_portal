@@ -1,0 +1,49 @@
+<div><form class="form-horizontal"><fieldset class="insideform"><!-- Form Name --> <br /><legend style="color: rgb(168, 6, 93);font-weight: 200;font-size: 30">Update Address</legend> <!-- Text input-->
+  <div class="form-group"><label class="col-md-4 control-label" for="textinput">House/Building/Apartment</label>
+  <div class="col-md-6"><input id="textinput" [(ngModel)]="house" class="form-control input-md" name="textinput" type="text" placeholder="Enter House/Building/Apartment" /></div>
+  </div>
+  <br /> 
+  <div class="form-group"><label class="col-md-4 control-label" for="textinput">Street/Road/Lane</label>
+  <div class="col-md-6"><input id="textinput" [(ngModel)]="street" class="form-control input-md" name="textinput" type="text" placeholder="Enter Street/Road/Lane" /></div>
+  </div>
+  <br /> 
+  <div class="form-group"><label class="col-md-4 control-label" for="textinput">Area/Locality/Sector</label> <br />
+  <div class="col-md-6"><input id="textinput" [(ngModel)]="area" class="form-control input-md" name="textinput" type="text" placeholder="Enter Area/Locality/Sector" /></div>
+  </div>
+  <br /> 
+  <div class="form-group"><label class="col-md-4 control-label" for="textinput">Landmark</label>
+  <div class="col-md-6"><input id="textinput" [(ngModel)]="landmark" class="form-control input-md" name="textinput" type="text" placeholder="Enter Landmark" /></div>
+  </div>
+  <br /> 
+  <div class="form-group"><label class="col-md-4 control-label" for="textinput">Pincode</label>
+  <div class="col-md-6"><input id="textinput" [(ngModel)]="pincode" class="form-control input-md" name="textinput" required="" type="text" placeholder="Enter PIncode" /></div>
+  </div>
+  <br /> 
+  <div class="form-group"><label class="col-md-4 control-label" for="textinput">Village / Town / City </label>
+  <div class="col-md-6"><input id="textinput" [(ngModel)]="village" class="form-control input-md" name="textinput" required="" type="text" placeholder="Enter Village / Town / City " /></div>
+  </div>
+  <br /> 
+  <div class="form-group"><label class="col-md-4 control-label" for="textinput">Post Office</label>
+  <div class="col-md-6"><input id="textinput" [(ngModel)]="postOffice"class="form-control input-md" name="textinput" required="" type="text" placeholder="Enter Post Office" /></div>
+  </div>
+  <br /> 
+  <div class="form-group"><label class="col-md-4 control-label" for="textinput">District</label>
+  <div class="col-md-6"><input id="textinput" [(ngModel)]="district" class="form-control input-md" name="textinput" required="" type="text" placeholder="Enter District" /></div>
+  </div>
+ <br />
+
+  <div class="form-group"><label class="col-md-4 control-label" for="textinput">State </label>
+  <div class="col-md-6"><input id="textinput" [(ngModel)]="state" class="form-control input-md" name="textinput" required="" type="text" placeholder="Enter State " /></div>
+  </div>
+  <br />
+  <div class="form-group"><label class="col-md-4 control-label" for="filebutton">Upload Address Proof</label>
+  <div class="col-md-4"><input id="filebutton" [(ngModel)]="upload" class="input-file" name="filebutton" type="file"
+    (change)="handleFileInput($event.target.files)"
+    /></div>
+  </div>
+<br />
+
+  <div class="form-group"><label class="col-md-4 control-label" for="singlebutton"></label>
+  <div class="col-md-4"><button id="singlebutton" (click)="submit()" class="btn btn-primary" name="singlebutton">Submit</button></div>
+  </div>
+  </fieldset></form></div>

@@ -1,0 +1,7 @@
+{ 
+  "BASE_URL": "https://sandboxv2.southindia.cloudapp.azure.com/", 
+  "PRE_REG_URL": "preregistration/v1/",
+  "MISP-LicenseKey":"lqYQppFeepGlHCqlWbJj8EkW2Fs9XkkeVxIEBGtF9X2IKAV9EI/",
+  "Partner-ID":"242447/",
+  "Partner-Api-Key":"75999518"
+}
