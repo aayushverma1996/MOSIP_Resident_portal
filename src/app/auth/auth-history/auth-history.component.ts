@@ -24,7 +24,7 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
   showResend = false;
   showVerify = false;
   showOTP = false;
-  disableVerify = false;
+  disableVerify = true;
   secondaryLanguagelabels: any;
   loggedOutLang: string;
   errorMessage: string;
@@ -91,23 +91,26 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
       this.inputOTP.length ===
       Number(this.configService.getConfigByKey(appConstants.CONFIG_KEYS.mosip_kernel_otp_default_length))
     ) {
+      console.log("verify if");
       this.showVerify = true;
       this.showResend = false;
+      this.disableVerify = false;
     } else {
-      this.showResend = true;
-      this.showVerify = false;
+      console.log("verify else");
+      this.disableVerify = true;
     }
   }
   submit(): void {
     if ((this.showSendOTP || this.showResend) && this.errorMessage === undefined )  {
       this.inputOTP = '';
-      this.showResend = true;
+      this.showResend = false;
+      this.showVerify=true;
       this.showOTP = true;
       this.showSendOTP = false;
-     // this.showContactDetails = false;
+     
       this.showDetail = false;
       console.log("inside submit111");
-
+//------------------------------------------------------
       const timerFn = () => {
         let secValue = Number(document.getElementById('secondsSpan').innerText);
         const minValue = Number(document.getElementById('minutesSpan').innerText);
@@ -117,8 +120,8 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
           if (minValue === 0) {
             // redirecting to initial phase on completion of timer
            // this.showContactDetails = true;
-            this.showSendOTP = true;
-            this.showResend = false;
+            this.showSendOTP = false;
+            this.showResend = true;
             this.showOTP = false;
             this.showVerify = false;
             this.showDetail = true;
@@ -136,18 +139,19 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
           document.getElementById('secondsSpan').innerText = --secValue + '';
         }
       };
-
+//----------------------------------------------------------
       // update of timer value on click of resend
       if (document.getElementById('timer').style.visibility === 'visible') {
         document.getElementById('secondsSpan').innerText = this.seconds;
         document.getElementById('minutesSpan').innerText = this.minutes;
+        return;
       } else {
         // initial set up for timer
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
 
-        this.dataService.generateToken().subscribe(response=>{
+        //this.dataService.generateToken().subscribe(response=>{
           this.dataService.sendOtpForServices(this.inputDetails,this.idType).subscribe(response=>{
              console.log("otp generated");
              console.log(response);
@@ -156,18 +160,29 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
             if (!response['errors']) {
                 this.showOtpMessage();
             } else {
-              this.disableVerify = false;
-              this.showErrorMessage();
+            this.showSendOTP = true;
+            this.showResend = false;
+            this.showOTP = false;
+            this.showVerify = false;
+            this.showDetail = true;
+            this.inputDetails = "";
+            document.getElementById('timer').style.visibility = 'hidden';
+            document.getElementById('minutesSpan').innerText = this.minutes;
+            clearInterval(this.timer);
+            this.showErrorMessage();
             }
+
+
           },
           error => {
             this.disableVerify = false;
             this.showErrorMessage();
           });
-        });
+        //});
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.errorMessage === undefined ) {
             this.disableVerify = true;
+            document.getElementById('timer').style.visibility = 'visible';
             clearInterval(this.timer);
             this.getAuthHistory();   
 
@@ -176,14 +191,16 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
 }
   getAuthHistory(){
     console.log("getAuthHistory");
+    this.showSpinner = true;
     this.dataService.authHistory(this.inputDetails,this.inputOTP,this.idType).subscribe(response=>{
       console.log(response);
+      this.showSpinner = false;
       
     });
   }
 
   showOtpMessage() {
-    //this.inputOTP = '';
+    this.inputOTP = '';
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let otpmessage = response['authCommonText']['otpSent'];
@@ -196,6 +213,7 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
       data: message
     });
   }
+
 
   showErrorMessage() {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));

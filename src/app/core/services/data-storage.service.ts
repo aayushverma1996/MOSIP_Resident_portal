@@ -499,6 +499,7 @@ export class DataStorageService {
 
 
     unlockUIN(authId: string, otp: string,authArray:string[],idType:string){
+      
       console.log("inside unlock");
       const request = {
         individualId: authId,
@@ -524,7 +525,7 @@ export class DataStorageService {
         transactionID: "0987654321",
       };
       const obj = new RequestModel(appConstants.IDS.authHistory, request);
-      const url= this.BASE_URL+ appConstants.APPEND_URL.resident_service + appConstants.APPEND_URL.unlock_service;
+      const url= this.BASE_URL+ appConstants.APPEND_URL.resident_service + appConstants.APPEND_URL.authHistory;
   //    const url = this.BASE_URL + appConstants.APPEND_URL.resident+ appConstants.APPEND_URL.vid;
       return this.httpClient.post(url,obj);
     }
