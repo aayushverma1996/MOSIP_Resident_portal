@@ -341,7 +341,8 @@
     "sub_text": "Request/Print",
     "sub_text_UID": "Unique Identification Number",
     "enter_uin":"Enter UIN",
-    "enter_vid": "Enter VID"
+    "enter_vid": "Enter VID",
+    "reprint_success":"Notification has been sent to the provided contact detail(s)"
   },
   "requestEuin":{
     "sub_text": "Request",
