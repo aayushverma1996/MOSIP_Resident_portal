@@ -25,7 +25,7 @@ export class LockComponent implements OnInit,OnDestroy {
   showResend = false;
   showVerify = false;
   showOTP = false;
-  disableVerify = false;
+  disableVerify = true;
   secondaryLanguagelabels: any;
   loggedOutLang: string;
   errorMessage: string;
@@ -206,9 +206,24 @@ export class LockComponent implements OnInit,OnDestroy {
       if(this.bioIir)
         auth.push('bio-Iris');
 
-        
+    this.showSpinner = true;
       this.dataService.lockUIN(this.inputDetails,this.inputOTP,auth,this.idType).subscribe(response=>{
-        console.log(response);
+        this.showSpinner = false;
+        if (!response['errors']) {
+          this.showResponseMessageDialog()
+        } else {
+          this.showSendOTP = true;
+          this.showResend = false;
+          this.showOTP = false;
+          this.showVerify = false;
+          this.showDetail = true;
+          this.inputDetails = "";
+          // document.getElementById('timer').style.visibility = 'hidden';
+          // document.getElementById('minutesSpan').innerText = this.minutes;
+          clearInterval(this.timer);
+          this.showErrorMessage();
+          this.router.navigate(["/"])
+        }
       });
     }
 
@@ -241,6 +256,19 @@ export class LockComponent implements OnInit,OnDestroy {
     });
   }
 
+  showResponseMessageDialog() {
+    let factory = new LanguageFactory(localStorage.getItem('langCode'));
+    let response = factory.getCurrentlanguage();
+    let successMessage = response["lock"][ "lock_success"];
+     const message = {
+      case: 'MESSAGE',
+      message: successMessage
+    };
+    this.dialog.open(DialougComponent, {
+      width: '350px',
+      data: message
+    });
+  }
   ngOnDestroy(){
     // console.log("component changed");
      clearInterval(this.timer);

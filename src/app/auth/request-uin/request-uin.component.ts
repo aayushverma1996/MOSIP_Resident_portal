@@ -201,6 +201,7 @@ export class RequestUinComponent implements OnInit,OnDestroy {
         // document.getElementById('minutesSpan').innerText = this.minutes;
         clearInterval(this.timer);
         this.showErrorMessage();
+        this.router.navigate(["/"])
       }
     }, error => {
         this.showSpinner = false;
