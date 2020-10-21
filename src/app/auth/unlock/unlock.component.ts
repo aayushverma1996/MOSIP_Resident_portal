@@ -96,23 +96,26 @@ idType:string;
       this.inputOTP.length ===
       Number(this.configService.getConfigByKey(appConstants.CONFIG_KEYS.mosip_kernel_otp_default_length))
     ) {
+      console.log("verify if");
       this.showVerify = true;
       this.showResend = false;
+      this.disableVerify = false;
     } else {
-      this.showResend = true;
-      this.showVerify = false;
+      console.log("verify else");
+      this.disableVerify = true;
     }
   }
   submit(): void {
     if ((this.showSendOTP || this.showResend) && this.errorMessage === undefined )  {
       this.inputOTP = '';
-      this.showResend = true;
+      this.showResend = false;
+      this.showVerify=true;
       this.showOTP = true;
       this.showSendOTP = false;
-     // this.showContactDetails = false;
+     
       this.showDetail = false;
       console.log("inside submit111");
-
+//------------------------------------------------------
       const timerFn = () => {
         let secValue = Number(document.getElementById('secondsSpan').innerText);
         const minValue = Number(document.getElementById('minutesSpan').innerText);
@@ -122,8 +125,8 @@ idType:string;
           if (minValue === 0) {
             // redirecting to initial phase on completion of timer
            // this.showContactDetails = true;
-            this.showSendOTP = true;
-            this.showResend = false;
+            this.showSendOTP = false;
+            this.showResend = true;
             this.showOTP = false;
             this.showVerify = false;
             this.showDetail = true;
@@ -154,12 +157,25 @@ idType:string;
 
         this.dataService.sendOtpForServices(this.inputDetails,this.idType).subscribe(response=>{
           console.log("otp generated");
+          console.log(response);
+
           if (!response['errors']) {
             this.showOtpMessage();
         } else {
-          this.disableVerify = false;
-          this.showOtpMessage();
+          this.showSendOTP = true;
+            this.showResend = false;
+            this.showOTP = false;
+            this.showVerify = false;
+            this.showDetail = true;
+            this.inputDetails = "";
+            document.getElementById('timer').style.visibility = 'hidden';
+            document.getElementById('minutesSpan').innerText = this.minutes;
+            clearInterval(this.timer);
+            this.showErrorMessage();
+            
         }
+
+
       },
       error => {
         this.disableVerify = false;
@@ -168,13 +184,14 @@ idType:string;
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.errorMessage === undefined ) {
             this.disableVerify = true;
+            document.getElementById('timer').style.visibility = 'visible';
             this.login = false;
             clearInterval(this.timer);
       }
   
 }
   unlock(){
-    
+    console.log("isme gya hai");
     console.log(this.bioFir);
     console.log(this.bioIir);
     console.log(this.bioFace);
@@ -184,13 +201,13 @@ idType:string;
       if(this.bioFir)
         auth.push('bio-FMR');
       if(this.bioIir)
-        auth.push('bio-IIR');
+        auth.push('bio-Iris');
 
-      this.dataService.generateToken().subscribe(response=>{
+      //this.dataService.generateToken().subscribe(response=>{
       this.dataService.unlockUIN(this.inputDetails,this.inputOTP,auth,this.idType).subscribe(response=>{
         console.log(response);
       });
-    });
+    //});
   }
 
   showOtpMessage() {
