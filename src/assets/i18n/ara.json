@@ -327,7 +327,8 @@
    "action_lock":"LOCK",
    "faceBio":"Face Biometric",
     "fingureBio": "Fingures Biometric",
-    "irisBio": "Iris Biometric"
+    "irisBio": "Iris Biometric",
+    "lock_success":"تم قفل الميزات المحددة بنجاح. تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة"
   },
   "unlock": {
     "sub_text": "قفل / فتح",
@@ -337,7 +338,8 @@
    "action_lock":"UNLOCK",
    "faceBio":"Face Biometric",
    "fingureBio": "Fingures Biometric",
-   "irisBio": "Iris Biometric"
+   "irisBio": "Iris Biometric",
+   "unlock_success":"تم إلغاء قفل الميزات المحددة بنجاح. تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة"
   },
   "authHistory":{
     "sub_text": "View",

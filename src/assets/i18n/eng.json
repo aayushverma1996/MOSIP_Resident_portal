@@ -365,7 +365,8 @@
     "action_lock":"LOCK",
     "faceBio":"Face Biometric",
     "fingureBio": "Fingures Biometric",
-    "irisBio": "Iris Biometric"
+    "irisBio": "Iris Biometric",
+    "lock_success":"Selected features has been locked successfully. Notification has been sent to the provided contact detail(s)"
   },
   "unlock":{
     "sub_text": "Unlock",
@@ -376,7 +377,8 @@
     "action_lock":"UNLOCK",
     "faceBio":"Face Biometric",
     "fingureBio": "Fingures Biometric",
-    "irisBio": "Iris Biometric"
+    "irisBio": "Iris Biometric",
+    "unlock_success":"Selected features has been unlocked successfully. Notification has been sent to the provided contact detail(s)"
   },
   "authHistory":{
     "sub_text": "View",
