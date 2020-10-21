@@ -206,7 +206,7 @@ export class RequestEuinComponent implements OnInit,OnDestroy {
     const blob = new Blob([data], { type: 'text/csv' });
     const url= window.URL.createObjectURL(blob);
     window.open(url);
-}
+  }
   showOtpMessage() {
     this.inputOTP = '';
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
