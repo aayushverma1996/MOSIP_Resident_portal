@@ -189,10 +189,10 @@ export class RequestEuinComponent implements OnInit,OnDestroy {
   requestEuin() {
     this.showSpinner = true;
     console.log("request Euin");
-    this.dataService.getEUIN(this.inputDetails,this.inputOTP,this.idType).subscribe(response=>{
+    this.dataService.getEUIN(this.inputDetails,this.inputOTP,this.idType).subscribe((response:any)=>{
     console.log(response);
-    const blob = new Blob([response], {type: 'application/pdf'});
-    var downloadURL = window.URL.createObjectURL(response);
+    const blob = new Blob([response as BlobPart], {type: 'application/pdf'});
+    var downloadURL = window.URL.createObjectURL(blob);
     var link = document.createElement('a');
     link.href = downloadURL;
     link.download = "E_UIN.pdf";
