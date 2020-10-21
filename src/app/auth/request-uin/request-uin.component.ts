@@ -24,7 +24,7 @@ export class RequestUinComponent implements OnInit,OnDestroy {
   showResend = false;
   showVerify = false;
   showOTP = false;
-  disableVerify = false;
+  disableVerify = true;
   secondaryLanguagelabels: any;
   loggedOutLang: string;
   errorMessage: string;
@@ -87,25 +87,25 @@ export class RequestUinComponent implements OnInit,OnDestroy {
     }
   }
 
-  showVerifyBtn() {
+   showVerifyBtn() {
     if (
       this.inputOTP.length ===
       Number(this.configService.getConfigByKey(appConstants.CONFIG_KEYS.mosip_kernel_otp_default_length))
     ) {
       this.showVerify = true;
       this.showResend = false;
+      this.disableVerify = false;
     } else {
-      this.showResend = true;
-      this.showVerify = false;
+      this.disableVerify = true;
     }
   }
   submit(): void {
-    if ((this.showSendOTP || this.showResend) && this.errorMessage === undefined )  {
+  if ((this.showSendOTP || this.showResend) && this.errorMessage === undefined )  {
       this.inputOTP = '';
-      this.showResend = true;
+      this.showResend = false;
+      this.showVerify = true;
       this.showOTP = true;
       this.showSendOTP = false;
-     // this.showContactDetails = false;
       this.showDetail = false;
       console.log("inside submit111");
 
@@ -149,24 +149,33 @@ export class RequestUinComponent implements OnInit,OnDestroy {
       }
 
 
-        this.dataService.generateToken().subscribe(response=>{
+       // this.dataService.generateToken().subscribe(response=>{
         this.dataService.sendOtpForServices(this.inputDetails,this.idType).subscribe(response=>{
           console.log("otp generated");
           if (!response['errors']) {
             this.showOtpMessage();
         } else {
-          this.disableVerify = false;
-          this.showOtpMessage();
+            this.showSendOTP = true;
+            this.showResend = false;
+            this.showOTP = false;
+            this.showVerify = false;
+            this.showDetail = true;
+            this.inputDetails = "";
+            document.getElementById('timer').style.visibility = 'hidden';
+            document.getElementById('minutesSpan').innerText = this.minutes;
+            clearInterval(this.timer);
+            this.showErrorMessage();
         }
       },
       error => {
         this.disableVerify = false;
         this.showErrorMessage();
         });
-      });
+    //  });
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.errorMessage === undefined ) {
             this.disableVerify = true;
+            document.getElementById('timer').style.visibility = 'visible';
             clearInterval(this.timer);
             this.requestPrintUin();   
 
@@ -175,8 +184,27 @@ export class RequestUinComponent implements OnInit,OnDestroy {
 }
   requestPrintUin(){
     console.log("reqPrintUin");
-    this.dataService.printUIN(this.inputDetails,this.inputOTP,this.idType).subscribe(response=>{
-      console.log(response);
+    this.showSpinner = true;
+    this.dataService.printUIN(this.inputDetails, this.inputOTP, this.idType).subscribe(response => {
+      if (!response['errors']) {
+        this.showSpinner = false;
+        this.showResponseMessageDialog()
+      } else {
+        this.showSpinner = false;
+        this.showSendOTP = true;
+        this.showResend = false;
+        this.showOTP = false;
+        this.showVerify = false;
+        this.showDetail = true;
+        this.inputDetails = "";
+        // document.getElementById('timer').style.visibility = 'hidden';
+        // document.getElementById('minutesSpan').innerText = this.minutes;
+        clearInterval(this.timer);
+        this.showErrorMessage();
+      }
+    }, error => {
+        this.showSpinner = false;
+        this.router.navigate(["/"])
     })
   }
 
@@ -202,6 +230,20 @@ export class RequestUinComponent implements OnInit,OnDestroy {
     const message = {
       case: 'MESSAGE',
       message: errormessage
+    };
+    this.dialog.open(DialougComponent, {
+      width: '350px',
+      data: message
+    });
+  }
+
+  showResponseMessageDialog() {
+    let factory = new LanguageFactory(localStorage.getItem('langCode'));
+    let response = factory.getCurrentlanguage();
+    let successMessage = response["reqPrintUin"]["reprint_success"];
+     const message = {
+      case: 'MESSAGE',
+      message: successMessage
     };
     this.dialog.open(DialougComponent, {
       width: '350px',

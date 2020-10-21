@@ -306,7 +306,8 @@
   "reqPrintUin": {
     "sub_text": "طلب / طباعة",
     "sub_text_UID": "رقم تعريف فريد",
-   "enter_uin":"أدخل VID"
+   "enter_uin":"أدخل VID",
+   "reprint_success":"تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة"
   },
   "requestEuin": {
     "sub_text": "طلب",
