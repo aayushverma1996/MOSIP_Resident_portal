@@ -24,7 +24,7 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
   showResend = false;
   showVerify = false;
   showOTP = false;
-  disableVerify = false;
+  disableVerify = true;
   secondaryLanguagelabels: any;
   loggedOutLang: string;
   errorMessage: string;
@@ -191,8 +191,10 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
 }
   getAuthHistory(){
     console.log("getAuthHistory");
+    this.showSpinner = true;
     this.dataService.authHistory(this.inputDetails,this.inputOTP,this.idType).subscribe(response=>{
       console.log(response);
+      this.showSpinner = false;
       
     });
   }
