@@ -90,19 +90,24 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
       this.inputOTP.length ===
       Number(this.configService.getConfigByKey(appConstants.CONFIG_KEYS.mosip_kernel_otp_default_length))
     ) {
+      console.log("inside if");
       this.showVerify = true;
       this.showResend = false;
+      this.disableVerify = false;
     } else {
-      this.showResend = true;
-      this.showVerify = false;
+      console.log("inside else");
+      this.disableVerify = true;
+      
     }
   }
   submit(): void {
     if ((this.showSendOTP || this.showResend) && this.vidErrorMessage === undefined )  {
       this.inputOTP = '';
-      this.showResend = true;
+      this.showResend = false;
       this.showOTP = true;
       this.showSendOTP = false;
+      this.showVerify = true;
+      this.disableVerify = true;
      // this.showContactDetails = false;
       this.showVidDetail = false;
       console.log("inside submit111");
@@ -145,22 +150,33 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
-        this.dataService.generateToken().subscribe(response=>{
+       // this.dataService.generateToken().subscribe(response=>{
         this.dataService.sendOtpForServices(this.inputVidDetails,"VID").subscribe(response=>{
           console.log("otp generated");
 
           if (!response['errors']) {
             this.showOtpMessage();
         } else {
-          this.disableVerify = false;
-          this.showOtpMessage();
+          this.showSendOTP = true;
+          this.showResend = false;
+          this.showOTP = false;
+          this.showVerify = false;
+          this.showVidDetail = true;
+          this.inputVidDetails = "";
+          document.getElementById('timer').style.visibility = 'hidden';
+          document.getElementById('minutesSpan').innerText = this.minutes;
+          clearInterval(this.timer);
+          this.showErrorMessage();
+       
+          //this.disableVerify = false;
+          //this.showOtpMessage();
         }
       },
       error => {
         this.disableVerify = false;
         this.showErrorMessage();
         });
-      });
+     // });
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.vidErrorMessage === undefined ) {
             this.disableVerify = true;
