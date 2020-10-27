@@ -115,7 +115,7 @@ idType:string;
      
       this.showDetail = false;
       console.log("inside submit111");
-//------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------
       const timerFn = () => {
         let secValue = Number(document.getElementById('secondsSpan').innerText);
         const minValue = Number(document.getElementById('minutesSpan').innerText);
@@ -206,7 +206,9 @@ idType:string;
         console.log(response);
         this.showSpinner = false;
         if (!response['errors']) {
-          this.showResponseMessageDialog()
+          this.showResponseMessageDialog();
+          this.router.navigate(["/"]);
+
         } else {
           this.showSendOTP = true;
           this.showResend = false;
@@ -218,7 +220,7 @@ idType:string;
           // document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
           this.showErrorMessage();
-          this.router.navigate(["/"])
+          this.router.navigate(["/"]);
         }
       });
     //});

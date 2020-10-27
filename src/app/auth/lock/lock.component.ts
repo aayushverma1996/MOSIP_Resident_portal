@@ -210,7 +210,8 @@ export class LockComponent implements OnInit,OnDestroy {
       this.dataService.lockUIN(this.inputDetails,this.inputOTP,auth,this.idType).subscribe(response=>{
         this.showSpinner = false;
         if (!response['errors']) {
-          this.showResponseMessageDialog()
+          this.showResponseMessageDialog();
+          this.router.navigate(["/"]);
         } else {
           this.showSendOTP = true;
           this.showResend = false;
@@ -222,7 +223,7 @@ export class LockComponent implements OnInit,OnDestroy {
           // document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
           this.showErrorMessage();
-          this.router.navigate(["/"])
+          this.router.navigate(["/"]);
         }
       });
     }
