@@ -186,10 +186,27 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
   
 }
   generatevid(){
+    this.showSpinner = true;
       console.log("generate Vid");
       this.dataService.generateVid(this.inputUinDetails,this.inputOTP).subscribe(response=>{
-        console.log(response);
-        console.log("error");
+        this.showSpinner = false;
+
+        if (!response['errors']) {
+          this.showResponseMessageDialog();
+          this.router.navigate([".."]);
+        } else {
+          this.showSendOTP = true;
+          this.showResend = false;
+          this.showOTP = false;
+          this.showVerify = false;
+          this.showUinDetail = true;
+          this.inputUinDetails = "";
+          // document.getElementById('timer').style.visibility = 'hidden';
+          // document.getElementById('minutesSpan').innerText = this.minutes;
+          clearInterval(this.timer);
+          this.showErrorMessage();
+          this.router.navigate([".."]);
+        } 
       })
 
   }
@@ -216,6 +233,20 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
     const message = {
       case: 'MESSAGE',
       message: errormessage
+    };
+    this.dialog.open(DialougComponent, {
+      width: '350px',
+      data: message
+    });
+  }
+
+  showResponseMessageDialog() {
+    let factory = new LanguageFactory(localStorage.getItem('langCode'));
+    let response = factory.getCurrentlanguage();
+    let successMessage = response["generate-vid"][ "generate-vid_message"];
+     const message = {
+      case: 'MESSAGE',
+      message: successMessage
     };
     this.dialog.open(DialougComponent, {
       width: '350px',
