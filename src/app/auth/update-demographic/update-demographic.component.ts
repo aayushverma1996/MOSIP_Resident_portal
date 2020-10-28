@@ -85,25 +85,33 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
       this.seconds = '00';
     }
   }
-
+  btnClick= function () {
+    this.router.navigate(['updateDemo']);
+};
   showVerifyBtn() {
     if (
       this.inputOTP.length ===
       Number(this.configService.getConfigByKey(appConstants.CONFIG_KEYS.mosip_kernel_otp_default_length))
     ) {
+      console.log("inside if");
       this.showVerify = true;
       this.showResend = false;
+      this.disableVerify = false;
+      //(onclick) = "btnClick();";
     } else {
-      this.showResend = true;
-      this.showVerify = false;
+      console.log("inside else");
+      this.disableVerify = true;
     }
   }
+  
   submit(): void {
     if ((this.showSendOTP || this.showResend) && this.errorMessage === undefined )  {
       this.inputOTP = '';
-      this.showResend = true;
+      this.showResend = false;
       this.showOTP = true;
       this.showSendOTP = false;
+      this.showVerify = true;
+      this.disableVerify = false;
      // this.showContactDetails = false;
       this.showDetail = false;
       console.log("inside submit111");
@@ -146,25 +154,37 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
-        this.dataService.generateToken().subscribe(response=>{
+        //this.dataService.generateToken().subscribe(response=>{
         this.dataService.sendOtpForServices(this.inputDetails,this.idType).subscribe(response=>{
           console.log("otp generated");
           if (!response['errors']) {
             this.showOtpMessage();
+            
         } else {
-          this.disableVerify = false;
-          this.showOtpMessage();
+          this.showSendOTP = true;
+          this.showResend = false;
+          this.showOTP = false;
+          this.showVerify = false;
+          this.showDetail = true;
+          this.inputDetails = "";
+          document.getElementById('timer').style.visibility = 'hidden';
+          document.getElementById('minutesSpan').innerText = this.minutes;
+          clearInterval(this.timer);
+          this.showErrorMessage();
+       
+          //this.disableVerify = false;
+          //this.showOtpMessage();
         }
       },
       error => {
         this.disableVerify = false;
         this.showErrorMessage();
         });
-      });
-     // this.updateDemo();
-
+      //});
+       this.updateDemo();
+      //this.router.navigate(['updatedemo']);
      // just for checking. put this line inside if(!response['error'])
-      this.router.navigate(['updatedemo']);
+      //
 
 
       
