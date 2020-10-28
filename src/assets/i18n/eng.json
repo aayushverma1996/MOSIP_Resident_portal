@@ -325,12 +325,14 @@
   "generateVid":{
     "sub_text": "Generate",
     "sub_text_UID": "Virtual Identification Number",
-    "enter_uin":"Enter UIN"
+    "enter_uin":"Enter UIN",
+    "generate-vid_message":"Notification has been sent to the provided contact detail(s)"
   },
   "revokeVid":{
     "sub_text": "Revoke",
     "sub_text_UID": "Virtual Identification Number",
-    "enter_uin":"Enter VID"
+    "enter_uin":"Enter VID",
+    "revoke-vid_message":"Notification has been sent to the provided contact detail(s)"
   },
   "servReqStatusCheck":{
     "sub_text": "Check status of",
