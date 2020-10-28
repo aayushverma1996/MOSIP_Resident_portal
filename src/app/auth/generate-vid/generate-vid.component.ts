@@ -190,10 +190,11 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
       console.log("generate Vid");
       this.dataService.generateVid(this.inputUinDetails,this.inputOTP).subscribe(response=>{
         this.showSpinner = false;
-
-        if (!response['errors']) {
-          this.showResponseMessageDialog();
-          this.router.navigate([".."]);
+        console.log("in generateVid" + !response['errors'])
+        if (response['errors'] == "") {
+          console.log("in if")
+          this.showResponseMessageDialog(response['response']['vid']);
+          //this.router.navigate([".."]);
         } else {
           this.showSendOTP = true;
           this.showResend = false;
@@ -205,7 +206,7 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
           // document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
           this.showErrorMessage();
-          this.router.navigate([".."]);
+          //this.router.navigate([".."]);
         } 
       })
 
@@ -240,13 +241,13 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
     });
   }
 
-  showResponseMessageDialog() {
+  showResponseMessageDialog(vid:string) {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
-    let successMessage = response["generate-vid"][ "generate-vid_message"];
+    let successMessage = response["generateVid"][ "generate-vid_message"];
      const message = {
       case: 'MESSAGE',
-      message: successMessage
+      message: "VID is "+vid
     };
     this.dialog.open(DialougComponent, {
       width: '350px',

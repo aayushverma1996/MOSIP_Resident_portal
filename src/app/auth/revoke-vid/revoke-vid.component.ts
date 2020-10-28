@@ -192,7 +192,7 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
     this.dataService.revokeVid(this.inputVidDetails,this.inputOTP).subscribe(response=>{
       this.showSpinner = false;
 
-      if (!response['errors']) {
+      if (response['errors'] == "") {
         this.showResponseMessageDialog();
         this.router.navigate([".."]);
       } else {
@@ -242,7 +242,7 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
   showResponseMessageDialog() {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
-    let successMessage = response["revoke-vid"][ "revoke-vid_message"];
+    let successMessage = response["revokeVid"][ "revoke-vid_message"];
      const message = {
       case: 'MESSAGE',
       message: successMessage
