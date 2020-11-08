@@ -33,14 +33,9 @@ const appInitialization = (appConfig: AppConfigService) => {
     AuthModule,
     SharedModule,
     FormsModule,
-<<<<<<< Updated upstream
-    NgxPrintModule
-    ],
-=======
     NgxPrintModule,
     ToastrModule.forRoot()
   ],
->>>>>>> Stashed changes
   providers: [
     BookingService,
     AppConfigService,
