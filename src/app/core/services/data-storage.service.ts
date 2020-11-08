@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 
 import * as appConstants from '../../app.constants';
 import { AppConfigService } from '../../app-config.service';
@@ -8,6 +8,7 @@ import { ConfigService } from './config.service';
 import { RequestModel} from 'src/app/shared/models/request-model/RequestModel';
 import { RequestModelSendOtp} from 'src/app/shared/models/request-model/RequestModelSendOtp';
 import { RequestModelServices } from 'src/app/shared/models/request-model/RequestModelServices';
+import { RequestModelForAuth } from 'src/app/shared/models/request-model/request-modelForAuth'
 import Utils from 'src/app/app.util';
 
 /**
@@ -336,16 +337,24 @@ export class DataStorageService {
     return this.httpClient.get(url);
   }
   generateToken(){
-    const req={
-      clientId: "residentUser_iiitB",
-      secretKey: "92d5ee2f-4dc5-4fdf-a112-ed4ec91c942b",
-      appId: "resident"
+    // const req={
+    //   clientId: "residentUser_iiitB",
+    //   secretKey: "92d5ee2f-4dc5-4fdf-a112-ed4ec91c942b",
+    //   appId: "resident"
+    // }
+    const req = {
+         appId: "registrationclient",
+         password: "Techno@123",
+         userName: "110119"
     }
-    const obj= new RequestModel(appConstants.IDS.residentTokenId,req);
+    const obj= new RequestModelForAuth(appConstants.IDS.residentTokenId,req,"");
 
-    const url=this.BASE_URL+'v1/authmanager/authenticate/clientidsecretkey'
-
-    return this.httpClient.post(url,obj);
+    const url=this.BASE_URL+'v1/authmanager/authenticate/useridPwd'
+    console.log(obj)
+    return this.httpClient.post(url, obj,
+      {
+        observe:'response',
+      });
 
   }
 
@@ -360,7 +369,7 @@ export class DataStorageService {
     return this.httpClient.post(url, obj);
   }
 
-    sendOtpForServices(uin: string, idType:string){
+    sendOtpForServices(uin: string, idType:string, authHeader:any){
 
       const obj = new RequestModelSendOtp(uin,idType);
   
@@ -368,8 +377,9 @@ export class DataStorageService {
       const url = this.BASE_URL + appConstants.APPEND_URL.otp_resident_services_new + this.MISP_LicenseKey + this.Partner_ID + this.Partner_Api_Key 
         ;
       console.log("in sendotpforservices");
-      return this.httpClient.post(url, obj);
-
+      var x = this.httpClient.post(url,obj,{ headers: new HttpHeaders({'Authorization':authHeader}) });
+      console.log(x)
+      return x;
     }
 
     serviceRequest(rid: string)
@@ -424,7 +434,7 @@ export class DataStorageService {
     }
 
 
-    generateVid(uin: string, otp : string){
+    generateVid(uin: string, otp : string, auth:string){
       console.log("inside generate VId");
       const request = {
         individualId: uin,
@@ -437,7 +447,7 @@ export class DataStorageService {
       const obj = new RequestModelServices(appConstants.IDS.generateVidId, request);
       const url= this.BASE_URL + appConstants.APPEND_URL.resident_service + appConstants.APPEND_URL.vid_service;
   //    const url = this.BASE_URL + appConstants.APPEND_URL.resident+ appConstants.APPEND_URL.vid;
-      return this.httpClient.post(url,obj);
+      return this.httpClient.post(url, obj);
   
     }
 

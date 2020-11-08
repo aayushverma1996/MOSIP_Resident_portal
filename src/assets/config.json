@@ -1,7 +1,7 @@
 { 
-  "BASE_URL": "https://sandboxv2.southindia.cloudapp.azure.com/", 
+  "BASE_URL": " https://qa.mosip.net/", 
   "PRE_REG_URL": "preregistration/v1/",
-  "MISP-LicenseKey":"lqYQppFeepGlHCqlWbJj8EkW2Fs9XkkeVxIEBGtF9X2IKAV9EI/",
-  "Partner-ID":"242447/",
-  "Partner-Api-Key":"75999518"
+  "MISP-LicenseKey":"EwdOOZVoCECw0Nu79AfLaODQh4haVwFt0pTDwPFFR4GwQN5QSG/",
+  "Partner-ID":"1000/",
+  "Partner-Api-Key":"73514184"
 }

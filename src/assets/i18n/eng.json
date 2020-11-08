@@ -267,8 +267,8 @@
   "mainpage":{
     "aboutResident" : "The Resident Services will provide a host of services to an individual which can be availed after the creation of their Unique Identification Number(UIN).",
     "genVID": "Generate Virtual ID",
-    "aboutResidentsubtext1" : "If you do not have a UIN,",
-    "aboutResidentsubtext2" : "you may book an appointment with the nearest registration center using the Book/Modify appointment option.",
+    "aboutResidentsubtext1" : "The Resident Services will provide a host of services,",
+    "aboutResidentsubtext2" : "to an individual which can be availed after the creation of their Unique Identification Number(UIN)",
     "revVID" : "Revoke Virtual ID",
     "ServiceRequestStatus" : "Service Request Status",
     "statuscheck" : "Here, you can check the status of your request",
@@ -326,7 +326,8 @@
     "sub_text": "Generate",
     "sub_text_UID": "Virtual Identification Number",
     "enter_uin":"Enter UIN",
-    "generate-vid_message":"Notification has been sent to the provided contact detail(s)"
+    "generate-vid_message":"Notification has been sent to the provided contact detail(s)",
+    "vid-success_message":"Your generated VID is :- "
   },
   "revokeVid":{
     "sub_text": "Revoke",

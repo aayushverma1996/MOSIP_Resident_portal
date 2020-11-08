@@ -99,9 +99,10 @@
         <span>{{ 'authCommonText.otp_valid_label' | translate }}&nbsp;</span><span id="minutesSpan">{{ minutes }}</span
         >:<span id="secondsSpan">{{ seconds }}</span>
       </div>
-
-
     </div>
-    
+    <div class="myDiv" *ngIf="showResult">
+      <h3>{{resultVID}}</h3>
+    </div>
+
   </div>
 </div>
