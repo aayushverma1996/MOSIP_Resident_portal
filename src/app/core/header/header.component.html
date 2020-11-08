@@ -1,6 +1,6 @@
 
 
-<mat-sidenav-container >
+<mat-sidenav-container (scroll)="onWindowScroll($event);" >
 
   <mat-sidenav #sidenav role="navigation" position="start" mode="push" >
     <!--<button mat-button [matMenuTriggerFor]="menu" (click)="sidenav.toggle()">{{ 'header.link_resident-services' | translate}}</button>-->
@@ -28,15 +28,16 @@
   <mat-sidenav-content>
     
     <mat-toolbar class="head">
-     <span style="width: 450px;"></span> <h1 class="mat-headline">{{'header.mainheading' | translate}} </h1>
+    <div style="margin-left:5px; width:40%"><a routerLink="/" class="logo"><img src="assets\logo-final.png"
+          class="header--logo" /></a></div><h1 class="mat-headline">{{'header.mainheading' | translate}} </h1>
       <span class="spacer"></span><button class="mat-button" (click)="onLogoClick()" >{{'header.home' | translate}}</button></mat-toolbar>
-    <mat-toolbar>
+    
+    
+      <mat-toolbar class="mat-toolbar-new" id="toStick">
       <!--<div class="sidenav-button">
         <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
       </div>-->
       
-      <a (click)="onLogoClick()"><img src="assets\logo-final.png" class="header--logo" /></a>
-      <div style="margin-left:5px;"><a routerLink="/" class="logo"></a></div>
      
       
       <!--<div style="font-size: 14px; color: #fff; margin-left: 20px;">
@@ -114,7 +115,8 @@
     </mat-toolbar>
   
     <main>
-      <router-outlet></router-outlet>
+        <router-outlet></router-outlet>
+    
       <app-footer></app-footer>
     </main>
     
