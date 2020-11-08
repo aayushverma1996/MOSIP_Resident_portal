@@ -142,3 +142,10 @@ table {
   background-color: #212529;
   border-color: #32383e;
 }
+.my-pagination /deep/ .ngx-pagination .current {
+  background: #1e3201;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+}
