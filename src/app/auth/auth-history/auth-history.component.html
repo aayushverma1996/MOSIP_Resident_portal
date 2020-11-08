@@ -3,41 +3,6 @@
   <mat-spinner></mat-spinner>
 </div>
 
-<div *ngIf="showAuthHistoryTable">
-  <table style="border: 1px solid black;">
-    <thead>
-      <tr>
-        <th>serialNumber</th>
-        <th>partnerName</th>
-        <th>partnerTransactionId</th>
-        <th>date</th>
-        <th>time</th>
-        <th>idUsed</th>
-        <th>authModality</th>
-        <th>responseCode</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      <tr *ngFor="let x of historyData | paginate: {itemsPerPage:10,currentPage:page};">
-      <td>{{x.serialNumber}}</td>
-      <td>{{x.partnerName}}</td>
-      <td>{{x.partnerTransactionId}}</td>
-      <td>{{x.date}}</td>
-      <td>{{x.time}}</td>
-      <td>{{x.idUsed}}</td>
-      <td>{{x.authModality}}</td>
-      <td>{{x.responseCode}}</td>
-      </tr>
-    </tbody>
-    <pagination-controls (pageChange) = "page = $event"></pagination-controls>
-  </table> 
-
-</div>
-
-
-
-
 <div *ngIf="!showSpinner" class="wrapper">
   <div class="form_wrapper">
     <div class="heading">
@@ -160,6 +125,39 @@
 
 
     </div>
-    
+  </div>
+  <div *ngIf="showAuthHistoryTable">
+    <table class="table table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th style="width: 5%;">SNo.</th>
+          <th>Partner Name</th>
+          <th>Partner TransactionId</th>
+          <th>Date</th>
+          <th>Time</th>
+          <!-- <th>Id Used</th> -->
+          <th>AuthModality</th>
+          <th>ResponseCode</th>
+        </tr>
+      </thead>
+      <tbody>
+  
+        <tr *ngFor="let x of historyData | paginate: {itemsPerPage:15,currentPage:page};">
+          <td>{{x.serialNumber}}</td>
+          <td>{{x.partnerName}}</td>
+          <td>{{x.partnerTransactionId}}</td>
+          <td>{{x.date}}</td>
+          <td>{{x.time}}</td>
+          <!-- <td>{{x.idUsed}}</td> -->
+          <td>{{x.authModality}}</td>
+          <td>{{x.responseCode}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <pagination-controls (pageChange)="page = $event"></pagination-controls>
+      </tfoot>
+  
+    </table>
+  
   </div>
 </div>

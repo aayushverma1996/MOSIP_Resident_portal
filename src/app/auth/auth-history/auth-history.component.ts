@@ -219,7 +219,12 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
 
       console.log(this.historyData);
 
-      this.showAuthHistoryTable=true;
+      this.showAuthHistoryTable = true;
+      this.showOTP = false
+      this.showDetail = false;
+      this.showSendOTP = false;
+      this.showVerify = false;
+      this.showResend = false;
       //trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
 
 
