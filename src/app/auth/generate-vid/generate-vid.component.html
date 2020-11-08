@@ -1,9 +1,6 @@
 
-<div class="wrapper spacing" *ngIf="showSpinner">
-  <mat-spinner></mat-spinner>
-</div>
-
-<div *ngIf="!showSpinner" class="wrapper">
+<app-spinner-custom *ngIf="showSpinner"></app-spinner-custom>
+<div *ngIf="!showResult" class="wrapper">
   <div class="form_wrapper">
     <div class="heading">
       <span>{{ 'authCommonText.text' | translate }}</span>
@@ -34,23 +31,6 @@
       </div>
       <p class="error" *ngIf="uinErrorMessage">{{ uinErrorMessage }}</p>
     </div>
-
-      <!-- <div *ngIf="showContactDetails && servicesActivationStatus[i] && i === 0">
-        <div [dir]="textDir">
-          <mat-form-field appearance="outline">
-            <input
-              class="input_pri"
-              autofocus="autofocus"
-              matInput
-              [(ngModel)]="inputContactDetails"
-              placeholder="{{ activatedServiceJSON.label_email_num | translate }}"
-              id="inputFieldContact"
-              required
-            />
-          </mat-form-field>
-        </div> 
-        <p class="error" *ngIf="contactErrorMessage && servicesActivationStatus[i]">{{ contactErrorMessage }}</p>
-      </div>-->
 
       <div *ngIf="showOTP">
         <mat-form-field appearance="outline">
@@ -100,9 +80,10 @@
         >:<span id="secondsSpan">{{ seconds }}</span>
       </div>
     </div>
-    <div class="myDiv" *ngIf="showResult">
-      <h3>{{resultVID}}</h3>
-    </div>
-
+    
   </div>
+
 </div>
+<app-success [text]="resultVID" *ngIf="showResult"></app-success>
+
+
