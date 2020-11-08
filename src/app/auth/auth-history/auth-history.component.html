@@ -3,6 +3,41 @@
   <mat-spinner></mat-spinner>
 </div>
 
+<div *ngIf="showAuthHistoryTable">
+  <table style="border: 1px solid black;">
+    <thead>
+      <tr>
+        <th>serialNumber</th>
+        <th>partnerName</th>
+        <th>partnerTransactionId</th>
+        <th>date</th>
+        <th>time</th>
+        <th>idUsed</th>
+        <th>authModality</th>
+        <th>responseCode</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr *ngFor="let x of historyData | paginate: {itemsPerPage:10,currentPage:page};">
+      <td>{{x.serialNumber}}</td>
+      <td>{{x.partnerName}}</td>
+      <td>{{x.partnerTransactionId}}</td>
+      <td>{{x.date}}</td>
+      <td>{{x.time}}</td>
+      <td>{{x.idUsed}}</td>
+      <td>{{x.authModality}}</td>
+      <td>{{x.responseCode}}</td>
+      </tr>
+    </tbody>
+    <pagination-controls (pageChange) = "page = $event"></pagination-controls>
+  </table> 
+
+</div>
+
+
+
+
 <div *ngIf="!showSpinner" class="wrapper">
   <div class="form_wrapper">
     <div class="heading">
@@ -58,6 +93,19 @@
       <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
     </div>
 
+<!-- 
+<div class="card text-center m-3">
+  <h3 class="card-header">Angular 8 Pagination Example</h3>
+  <div class="card-body">
+      <div *ngFor="let item of pageOfItems">{{item.name}}</div>
+  </div>
+  <div class="card-footer pb-0 pt-3">
+      <jw-pagination [items]="items" (changePage)="onChangePage($event)"></jw-pagination>
+  </div>
+</div>
+ -->
+
+
 
       <div *ngIf="showOTP">
         <mat-form-field appearance="outline">
@@ -83,6 +131,9 @@
           {{ 'authCommonText.action_send' | translate }}
         </button>
       </div>
+
+
+      
 
       <div *ngIf="showVerify">
         <button
