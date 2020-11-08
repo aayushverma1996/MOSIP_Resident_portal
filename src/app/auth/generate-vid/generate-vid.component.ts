@@ -89,19 +89,23 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
     if (
       this.inputOTP.length ===Number(this.configService.getConfigByKey(appConstants.CONFIG_KEYS.mosip_kernel_otp_default_length))
     ) {
+      console.log("inside if");
       this.showVerify = true;
       this.showResend = false;
+      this.disableVerify = false;
     } else {
-      this.showResend = true;
-      this.showVerify = false;
+      console.log("inside else");
+      this.disableVerify = true;
     }
   }
   submit(): void {
     if ((this.showSendOTP || this.showResend) && this.uinErrorMessage === undefined )  {
       this.inputOTP = '';
-      this.showResend = true;
+      this.showResend = false;
       this.showOTP = true;
       this.showSendOTP = false;
+      this.showVerify = true;
+      this.disableVerify = true;
      // this.showContactDetails = false;
       this.showUinDetail = false;
       console.log("inside submit111");
@@ -145,15 +149,25 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
         this.timer = setInterval(timerFn, 1000);
       }
 
-        this.dataService.generateToken().subscribe(response=>{
+       // this.dataService.generateToken().subscribe(response=>{
         this.dataService.sendOtpForServices(this.inputUinDetails,"UIN").subscribe(response=>{
           console.log("otp generated");
 
           if (!response['errors']) {
             this.showOtpMessage();
         } else {
-          this.disableVerify = false;
-          this.showOtpMessage();
+          this.showSendOTP = true;
+            this.showResend = false;
+            this.showOTP = false;
+            this.showVerify = false;
+            this.showUinDetail = true;
+            this.inputUinDetails = "";
+            document.getElementById('timer').style.visibility = 'hidden';
+            document.getElementById('minutesSpan').innerText = this.minutes;
+            clearInterval(this.timer);
+            this.showErrorMessage();
+          //this.disableVerify = false;
+          //this.showOtpMessage();
         }
       },
       error => {
@@ -161,7 +175,7 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
         this.showErrorMessage();
         });
 
-      });
+   //   });
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.uinErrorMessage === undefined ) {
             this.disableVerify = true;
@@ -172,10 +186,28 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
   
 }
   generatevid(){
+    this.showSpinner = true;
       console.log("generate Vid");
       this.dataService.generateVid(this.inputUinDetails,this.inputOTP).subscribe(response=>{
-        console.log(response);
-        console.log("error");
+        this.showSpinner = false;
+        console.log("in generateVid" + !response['errors'])
+        if (response['errors'] == "") {
+          console.log("in if")
+          this.showResponseMessageDialog(response['response']['vid']);
+          //this.router.navigate([".."]);
+        } else {
+          this.showSendOTP = true;
+          this.showResend = false;
+          this.showOTP = false;
+          this.showVerify = false;
+          this.showUinDetail = true;
+          this.inputUinDetails = "";
+          // document.getElementById('timer').style.visibility = 'hidden';
+          // document.getElementById('minutesSpan').innerText = this.minutes;
+          clearInterval(this.timer);
+          this.showErrorMessage();
+          //this.router.navigate([".."]);
+        } 
       })
 
   }
@@ -202,6 +234,20 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
     const message = {
       case: 'MESSAGE',
       message: errormessage
+    };
+    this.dialog.open(DialougComponent, {
+      width: '350px',
+      data: message
+    });
+  }
+
+  showResponseMessageDialog(vid:string) {
+    let factory = new LanguageFactory(localStorage.getItem('langCode'));
+    let response = factory.getCurrentlanguage();
+    let successMessage = response["generateVid"][ "generate-vid_message"];
+     const message = {
+      case: 'MESSAGE',
+      message: "VID is "+vid
     };
     this.dialog.open(DialougComponent, {
       width: '350px',

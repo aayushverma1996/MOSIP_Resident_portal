@@ -452,7 +452,7 @@ export class DataStorageService {
       };
       const obj = new RequestModelServices(appConstants.IDS.revokeVid, request);
       const url= this.BASE_URL+'resident/v1/vid/'+vid;
-      return this.httpClient.post(url,obj);
+      return this.httpClient.patch(url,obj);
     }
 
     updateDemoUserOtp(userId: string, otp: string, idType:string  ){

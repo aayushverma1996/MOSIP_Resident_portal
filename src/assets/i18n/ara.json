@@ -286,12 +286,14 @@
   "generateVid": {
     "sub_text": "انشاء",
     "sub_text_UID": "رقم التعريف الظاهري",
-   "enter_uin":"أدخل UIN"
+   "enter_uin":"أدخل UIN",
+   "generate-vid_message":"تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة"
   },
   "revokeVid": {
     "sub_text": "سحب او إبطال",
     "sub_text_UID": "رقم التعريف الظاهري",
-   "enter_uin":"أدخل VID"
+   "enter_uin":"أدخل VID",
+   "revoke-vid_message":"تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة"
   },
   "servReqStatusCheck": {
     "sub_text": "تحقق من حالة",
