@@ -18,9 +18,10 @@ import { LockComponent } from './lock/lock.component';
 import { UnlockComponent } from './unlock/unlock.component';
 import { AuthHistoryComponent } from './auth-history/auth-history.component';
 
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [LoginComponent, MainpageComponent, GenerateVidComponent, RevokeVidComponent, RequestUinComponent, RequestEuinComponent, UpdateDemographicComponent, ServiceReqStatusCheckComponent, LockComponent, UnlockComponent, AuthHistoryComponent],
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, AuthRoutingModule, AppRoutingModule, SharedModule]
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, AuthRoutingModule, AppRoutingModule, SharedModule, NgxPaginationModule]
 })
 export class AuthModule {}
