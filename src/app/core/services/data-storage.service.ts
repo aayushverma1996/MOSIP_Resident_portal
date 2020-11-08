@@ -426,6 +426,7 @@ export class DataStorageService {
 
     generateVid(uin: string, otp : string){
       console.log("inside generate VId");
+      console.log(otp);
       const request = {
         individualId: uin,
         individualIdType: "UIN",
@@ -458,18 +459,22 @@ export class DataStorageService {
     updateDemoUserOtp(userId: string, otp: string, idType:string  ){
       this.userIdUpdateDemo=userId;
       this.otpUpdateDemo=otp;
+      console.log(otp);
+      console.log(this.otpUpdateDemo);
       this.idTypeUpdateDemo=idType;
     }
     updateDemographic( docByteArray:any, fileData:File) {
     console.log("Inside UpdateDemo");
     console.log(this.userIdUpdateDemo);
-
+    console.log(this.otpUpdateDemo);
       const request={ 
         transactionID :"0987654321",
         individualId : this.userIdUpdateDemo,
         individualIdType : this.idTypeUpdateDemo,
         otp : this.otpUpdateDemo,
-        identityJson : "<base64 encoded identity json byte array>",
+        
+        //identityJson : "<base64 encoded identity json byte array>",
+        identityJson : "ewoJImlkZW50aXR5IjogewoJCSJwaG9uZSI6ICI5OTk0OTA5NzQ3IiwKCQkiZW1haWwiOiAibG9nYW5hdGhhbi5zZWthckBtaW5kdHJlZS5jb20iLAoJCSJJRFNjaGVtYVZlcnNpb24iOiAwLjIsCgkJIlVJTiI6ICIyMDk2MjU2MTUyIgoJfQp9",
         documents:[ 
            { 
               name:fileData.name,
@@ -477,6 +482,12 @@ export class DataStorageService {
            }
         ]
      }
+     const obj = new RequestModelServices(appConstants.IDS.updateDemo, request);
+     console.log("API update Demo hit1");
+      const url= this.BASE_URL + appConstants.APPEND_URL.resident_service + appConstants.APPEND_URL.updateDemo;
+      console.log("API update Demo hit2");
+      return this.httpClient.post(url,obj);
+      
      //const url='';
      //return this.httpClient.post(url,);
 
