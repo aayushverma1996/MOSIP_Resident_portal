@@ -9,6 +9,7 @@ import { RegistrationService } from 'src/app/core/services/registration.service'
 import { ConfigService } from 'src/app/core/services/config.service';
 import * as appConstants from '../../app.constants';
 import LanguageFactory from '../../../assets/i18n';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-request-uin',
@@ -47,6 +48,7 @@ export class RequestUinComponent implements OnInit,OnDestroy {
     private dataService: DataStorageService,
     private regService: RegistrationService,
     private configService: ConfigService,
+    private toast:ToastrService
   ) {
   }
 
@@ -148,10 +150,11 @@ export class RequestUinComponent implements OnInit,OnDestroy {
         this.timer = setInterval(timerFn, 1000);
       }
 
-
-       this.dataService.generateToken().subscribe(response=>{
+    this.showSpinner = true;
+    this.dataService.generateToken().subscribe(response=>{
         this.dataService.sendOtpForServices(this.inputDetails,this.idType, response.headers.get("authorization")).subscribe(response=>{
           console.log("otp generated");
+          this.showSpinner = false;
           if (!response['errors']) {
             this.showOtpMessage();
         } else {
@@ -164,12 +167,13 @@ export class RequestUinComponent implements OnInit,OnDestroy {
             document.getElementById('timer').style.visibility = 'hidden';
             document.getElementById('minutesSpan').innerText = this.minutes;
             clearInterval(this.timer);
-            this.showErrorMessage();
+            this.showErrorMessage(response['errors'][0]["errorMessage"]);
         }
       },
       error => {
+        this.showSpinner = false
         this.disableVerify = false;
-        this.showErrorMessage();
+        this.showErrorMessage("");
         });
     });
       // dynamic update of button text for Resend and Verify
@@ -197,15 +201,15 @@ export class RequestUinComponent implements OnInit,OnDestroy {
         this.showVerify = false;
         this.showDetail = true;
         this.inputDetails = "";
-        // document.getElementById('timer').style.visibility = 'hidden';
-        // document.getElementById('minutesSpan').innerText = this.minutes;
+        document.getElementById('timer').style.visibility = 'hidden';
+        document.getElementById('minutesSpan').innerText = this.minutes;
         clearInterval(this.timer);
-        this.showErrorMessage();
-        this.router.navigate(["/"])
+        this.showErrorMessage(response["errors"][0]["message"]);
       }
     }, error => {
-        this.showSpinner = false;
-        this.router.navigate(["/"])
+        this.showSpinner = false
+        this.disableVerify = false;
+        this.showErrorMessage("");
     })
   }
 
@@ -214,45 +218,33 @@ export class RequestUinComponent implements OnInit,OnDestroy {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let otpmessage = response['authCommonText']['otpSent'];
-    const message = {
-      case: 'MESSAGE',
-      message: otpmessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    this.toast.success(otpmessage, "Success", {positionClass:"my-toast-class",progressBar:true} );
+
   }
 
-  showErrorMessage() {
+  showErrorMessage(errMsg:string) {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let errormessage = response['error']['error'];
-    const message = {
-      case: 'MESSAGE',
-      message: errormessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    if (errMsg == "")
+    {
+       this.toast.error(errormessage,"Error", {positionClass:"my-toast-class",progressBar:true})
+
+    }
+    else
+    {
+       this.toast.error(errMsg,"Error", {positionClass:"my-toast-class",progressBar:true})
+      }
+   
   }
 
   showResponseMessageDialog() {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let successMessage = response["reqPrintUin"]["reprint_success"];
-     const message = {
-      case: 'MESSAGE',
-      message: successMessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    this.toast.success(successMessage, "Success", {positionClass:"my-toast-class",progressBar:true} );
   }
   ngOnDestroy(){
-    // console.log("component changed");
      clearInterval(this.timer);
    }
 
