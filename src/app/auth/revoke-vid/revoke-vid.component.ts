@@ -150,8 +150,8 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
-       // this.dataService.generateToken().subscribe(response=>{
-        this.dataService.sendOtpForServices(this.inputVidDetails,"VID").subscribe(response=>{
+        this.dataService.generateToken().subscribe(response=>{
+        this.dataService.sendOtpForServices(this.inputVidDetails,"VID",response.headers.get("authorization")).subscribe(response=>{
           console.log("otp generated");
 
           if (!response['errors']) {
@@ -176,7 +176,7 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
         this.disableVerify = false;
         this.showErrorMessage();
         });
-     // });
+      });
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.vidErrorMessage === undefined ) {
             this.disableVerify = true;

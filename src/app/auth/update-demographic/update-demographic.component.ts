@@ -155,8 +155,8 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
-        //this.dataService.generateToken().subscribe(response=>{
-        this.dataService.sendOtpForServices(this.inputDetails,this.idType).subscribe(response=>{
+        this.dataService.generateToken().subscribe(response=>{
+        this.dataService.sendOtpForServices(this.inputDetails,this.idType,response.headers.get("authorization")).subscribe(response=>{
           console.log("otp generated");
           if (!response['errors']) {
             this.showOtpMessage();
@@ -181,7 +181,7 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
         this.disableVerify = false;
         this.showErrorMessage();
         });
-      //});
+      });
        //this.updateDemo();
       //this.router.navigate(['updatedemo']);
      // just for checking. put this line inside if(!response['error'])
