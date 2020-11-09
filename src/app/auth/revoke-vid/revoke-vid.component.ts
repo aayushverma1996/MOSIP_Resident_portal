@@ -156,6 +156,7 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
       this.showSpinner = true;
        this.dataService.generateToken().subscribe(response=>{
         this.dataService.sendOtpForServices(this.inputVidDetails,"VID",response.headers.get("Authorization")).subscribe(response=>{
+
           console.log("otp generated");
           this.showSpinner = false;
           if (!response['errors']) {
@@ -182,6 +183,7 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
           this.showErrorMessage(response['errors']);
         });
      });
+
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.vidErrorMessage === undefined ) {
             this.disableVerify = true;

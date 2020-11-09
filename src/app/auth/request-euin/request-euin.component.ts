@@ -150,9 +150,9 @@ export class RequestEuinComponent implements OnInit,OnDestroy {
         this.timer = setInterval(timerFn, 1000);
         console.log("hey")
       }
-        //this.dataService.generateToken().subscribe(response => {
+        this.dataService.generateToken().subscribe(response => {
 
-        this.dataService.sendOtpForServices(this.inputDetails,this.idType).subscribe(response=>{
+        this.dataService.sendOtpForServices(this.inputDetails,this.idType,response.headers.get("authorization")).subscribe(response=>{
          
           console.log("hello,in euin.ts");
           if (!response['errors']) {
@@ -175,7 +175,7 @@ export class RequestEuinComponent implements OnInit,OnDestroy {
         this.disableVerify = false;
         this.showErrorMessage();
         });
-     // });
+      });
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.errorMessage === undefined ) {
             this.disableVerify = true;

@@ -142,7 +142,7 @@
     </thead>
     <tbody>
 
-      <tr *ngFor="let x of historyData | paginate: {itemsPerPage:15,currentPage:page};">
+      <tr *ngFor="let x of historyData | paginate: {itemsPerPage:10,currentPage:page};">
         <td>{{x.serialNumber}}</td>
         <td>{{x.partnerName}}</td>
         <td>{{x.partnerTransactionId}}</td>
@@ -153,15 +153,16 @@
         <td>{{x.responseCode}}</td>
       </tr>
     </tbody>
+    
   </table>
-
+  <pagination-controls 
+  class="my-pagination"
+   previousLabel="" 
+   nextLabel="" 
+   (pageChange)="page = $event">
+  </pagination-controls>
   <div class="pagination"> 
-    <pagination-controls 
-    class="my-pagination"
-     previousLabel="" 
-     nextLabel="" 
-     (pageChange)="page = $event">
-    </pagination-controls>
+   
   </div>
 
 </div>

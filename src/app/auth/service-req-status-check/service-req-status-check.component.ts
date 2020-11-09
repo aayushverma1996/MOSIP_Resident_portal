@@ -152,9 +152,11 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
+      
       this.showSpinner = true;
       this.dataService.generateToken().subscribe(response=>{
         this.dataService.sendOtpForServices(this.inputDetails,"RID",response.headers.get("Authorization")).subscribe(response=>{
+
           console.log("otp generated");
           this.showSpinner = false;
           if (!response['errors']) {
