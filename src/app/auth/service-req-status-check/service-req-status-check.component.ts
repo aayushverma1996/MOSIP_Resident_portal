@@ -148,7 +148,7 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
         this.timer = setInterval(timerFn, 1000);
       }
         this.dataService.generateToken().subscribe(response=>{
-        this.dataService.sendOtpForServices(this.inputDetails,"RID").subscribe(response=>{
+        this.dataService.sendOtpForServices(this.inputDetails,"RID",response.headers.get("authorization")).subscribe(response=>{
           console.log("otp generated");
           if (!response['errors']) {
             this.showOtpMessage();

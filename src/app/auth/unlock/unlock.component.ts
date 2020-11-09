@@ -154,8 +154,9 @@ idType:string;
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
+      this.dataService.generateToken().subscribe(response=>{
 
-        this.dataService.sendOtpForServices(this.inputDetails,this.idType).subscribe(response=>{
+        this.dataService.sendOtpForServices(this.inputDetails,this.idType,response.headers.get("authorization")).subscribe(response=>{
           console.log("otp generated");
           console.log(response);
 
@@ -181,6 +182,7 @@ idType:string;
         this.disableVerify = false;
         this.showErrorMessage();
         });
+      });
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.errorMessage === undefined ) {
             this.disableVerify = true;
