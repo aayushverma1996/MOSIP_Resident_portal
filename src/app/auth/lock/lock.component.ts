@@ -9,6 +9,8 @@ import { RegistrationService } from 'src/app/core/services/registration.service'
 import { ConfigService } from 'src/app/core/services/config.service';
 import * as appConstants from '../../app.constants';
 import LanguageFactory from '../../../assets/i18n';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-lock',
@@ -52,6 +54,8 @@ export class LockComponent implements OnInit,OnDestroy {
     private dataService: DataStorageService,
     private regService: RegistrationService,
     private configService: ConfigService,
+    private toast: ToastrService
+
   ) {
   }
 
@@ -159,13 +163,15 @@ export class LockComponent implements OnInit,OnDestroy {
         this.timer = setInterval(timerFn, 1000);
       }
 
-
+      this.showSpinner=true;
       this.dataService.generateToken().subscribe(response=>{
         this.dataService.sendOtpForServices(this.inputDetails,this.idType, response.headers.get("authorization")).subscribe(response=>{
           console.log(response);
           console.log("otp generated");
+          this.showSpinner=false;
           if (!response['errors']) {
             this.showOtpMessage();
+
         } else {
           this.showSendOTP = true;
           this.showResend = false;
@@ -176,14 +182,16 @@ export class LockComponent implements OnInit,OnDestroy {
           document.getElementById('timer').style.visibility = 'hidden';
           document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
-          this.showErrorMessage();
+          this.showErrorMessage(response['errors'][0]["errorMessage"]);
         }
 
 
       },
       error => {
+        this.showSpinner=false;
+
         this.disableVerify = false;
-        this.showErrorMessage();
+    this.showErrorMessage(response['errors']);
       });
    });
     
@@ -197,12 +205,13 @@ export class LockComponent implements OnInit,OnDestroy {
       }
   
 }
+
   lock(){
       let auth: string[]=[];
       if(this.bioFace)
         auth.push('bio-FACE');
       if(this.bioFir)
-        auth.push('bio-FMR');
+        auth.push('bio-FID');
       if(this.bioIir)
         auth.push('bio-Iris');
 
@@ -210,68 +219,59 @@ export class LockComponent implements OnInit,OnDestroy {
       this.dataService.lockUIN(this.inputDetails,this.inputOTP,auth,this.idType).subscribe(response=>{
         this.showSpinner = false;
         if (!response['errors']) {
-          this.showResponseMessageDialog();
+          this.showResponseMessageDialog(response['response']['vid']);
           this.router.navigate(["/"]);
+          
         } else {
-          this.showSendOTP = true;
-          this.showResend = false;
-          this.showOTP = false;
-          this.showVerify = false;
-          this.showDetail = true;
-          this.inputDetails = "";
+          // this.showSendOTP = true;
+          // this.showResend = false;
+          // this.showOTP = false;
+          // this.showVerify = false;
+          // this.showDetail = true;
+          //this.inputDetails = "";
           // document.getElementById('timer').style.visibility = 'hidden';
           // document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
-          this.showErrorMessage();
-          this.router.navigate(["/"]);
+          this.showErrorMessage(response['errors'][0]["errorMessage"]);
+          //this.router.navigate(["/"]);
         }
       });
     }
+
+  
+
 
   showOtpMessage() {
     this.inputOTP = '';
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let otpmessage = response['authCommonText']['otpSent'];
-    const message = {
-      case: 'MESSAGE',
-      message: otpmessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+  
+    this.toast.success(otpmessage, "Success", {positionClass:"my-toast-class",progressBar:true} );
   }
 
-  showErrorMessage() {
+  showErrorMessage(errMsg:string) {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let errormessage = response['error']['error'];
-    const message = {
-      case: 'MESSAGE',
-      message: errormessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    
+    this.toast.error(errMsg,"Error", {positionClass:"my-toast-class",progressBar:true})
   }
 
-  showResponseMessageDialog() {
-    let factory = new LanguageFactory(localStorage.getItem('langCode'));
-    let response = factory.getCurrentlanguage();
-    let successMessage = response["lock"][ "lock_success"];
-     const message = {
-      case: 'MESSAGE',
-      message: successMessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
-  }
-  ngOnDestroy(){
-    // console.log("component changed");
-     clearInterval(this.timer);
-   }
+
+
+showResponseMessageDialog(vid:string) {
+  let factory = new LanguageFactory(localStorage.getItem('langCode'));
+  let response = factory.getCurrentlanguage();
+  let successMessage = response["lock"][ "lock_success"];
+  
+ 
+  this.toast.success(successMessage, "Success", { positionClass: "my-toast-class", progressBar: true });
+  // this.resultVID = VIDMessage + vid;
+  // this.showResult = true;
+}
+
+ngOnDestroy(){
+   clearInterval(this.timer);
+ }
 }

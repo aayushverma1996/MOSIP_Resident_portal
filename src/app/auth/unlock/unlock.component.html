@@ -1,9 +1,9 @@
 
-<div class="wrapper spacing" *ngIf="showSpinner">
-  <mat-spinner></mat-spinner>
-</div>
+<app-spinner-custom *ngIf="showSpinner">
+  
+</app-spinner-custom>
 
-<div *ngIf="!showSpinner" class="wrapper">
+<div class="wrapper">
   <div class="form_wrapper" *ngIf="login">
     <div class="heading">
       <span>{{ 'authCommonText.text' | translate }}</span>
