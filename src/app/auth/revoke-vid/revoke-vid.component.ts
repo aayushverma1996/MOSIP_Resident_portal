@@ -9,6 +9,7 @@ import { RegistrationService } from 'src/app/core/services/registration.service'
 import { ConfigService } from 'src/app/core/services/config.service';
 import * as appConstants from '../../app.constants';
 import LanguageFactory from '../../../assets/i18n';
+import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-revoke-vid',
   templateUrl: './revoke-vid.component.html',
@@ -34,7 +35,8 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
   validationMessages = {};
   inputVidDetails = '';
   showVidDetail = true;
-
+  showResult = false;
+  resultVID = "";
 
   constructor(
     private authService: AuthService,
@@ -45,6 +47,7 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
     private dataService: DataStorageService,
     private regService: RegistrationService,
     private configService: ConfigService,
+    private toast: ToastrService
   ) {
   }
 
@@ -150,10 +153,11 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
-       // this.dataService.generateToken().subscribe(response=>{
-        this.dataService.sendOtpForServices(this.inputVidDetails,"VID").subscribe(response=>{
+      this.showSpinner = true;
+       this.dataService.generateToken().subscribe(response=>{
+        this.dataService.sendOtpForServices(this.inputVidDetails,"VID",response.headers.get("Authorization")).subscribe(response=>{
           console.log("otp generated");
-
+          this.showSpinner = false;
           if (!response['errors']) {
             this.showOtpMessage();
         } else {
@@ -166,17 +170,18 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
           document.getElementById('timer').style.visibility = 'hidden';
           document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
-          this.showErrorMessage();
+          this.showErrorMessage(response["errors"][0]["errorMessage"]);
        
           //this.disableVerify = false;
           //this.showOtpMessage();
         }
       },
-      error => {
-        this.disableVerify = false;
-        this.showErrorMessage();
+          error => {
+          this.showSpinner = false;
+          this.disableVerify = false;
+          this.showErrorMessage(response['errors']);
         });
-     // });
+     });
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.vidErrorMessage === undefined ) {
             this.disableVerify = true;
@@ -191,10 +196,8 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
     console.log("revokeVid");
     this.dataService.revokeVid(this.inputVidDetails,this.inputOTP).subscribe(response=>{
       this.showSpinner = false;
-
       if (response['errors'] == "") {
         this.showResponseMessageDialog();
-        this.router.navigate([".."]);
       } else {
         this.showSendOTP = true;
         this.showResend = false;
@@ -205,8 +208,7 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
         // document.getElementById('timer').style.visibility = 'hidden';
         // document.getElementById('minutesSpan').innerText = this.minutes;
         clearInterval(this.timer);
-        this.showErrorMessage();
-        this.router.navigate([".."]);
+        this.showErrorMessage(response["error"][0]["errorMessage"]);
       }
     })
   }
@@ -216,41 +218,39 @@ export class RevokeVidComponent implements OnInit,OnDestroy {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let otpmessage = response['authCommonText']['otpSent'];
-    const message = {
-      case: 'MESSAGE',
-      message: otpmessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    // const message = {
+    //   case: 'MESSAGE',
+    //   message: otpmessage
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+    this.toast.success(otpmessage, "Success", {positionClass:"my-toast-class",progressBar:true} );
   }
 
-  showErrorMessage() {
+  showErrorMessage(errMsg: string) {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let errormessage = response['error']['error'];
-    const message = {
-      case: 'MESSAGE',
-      message: errormessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    // const message = {
+    //   case: 'MESSAGE',
+    //   message: errormessage
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+     this.toast.error(errMsg,"Error", {positionClass:"my-toast-class",progressBar:true})
   }
   showResponseMessageDialog() {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
-    let successMessage = response["revokeVid"][ "revoke-vid_message"];
-     const message = {
-      case: 'MESSAGE',
-      message: successMessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    let successMessage = response["revokeVid"]["revoke-vid_message"];
+    let VIDMessage = response["revokeVid"]["revoke_success_message"]
+    this.toast.success(successMessage, "Success", { positionClass: "my-toast-class", progressBar: true });
+    this.resultVID = VIDMessage;
+    this.showResult = true;
   }
   ngOnDestroy(){
     // console.log("component changed");
