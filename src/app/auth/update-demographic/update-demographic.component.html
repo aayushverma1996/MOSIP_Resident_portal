@@ -91,6 +91,8 @@
           [disabled]="disableVerify"
           disabled="{{ disableBtn }}"
           (click)="submit()"
+          (click)="updateDemo_new()"
+          
         >
           {{ 'authCommonText.action_verify' | translate }}
         </button>

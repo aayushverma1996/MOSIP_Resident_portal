@@ -151,10 +151,11 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
-      
+      this.showSpinner = true;
       this.dataService.generateToken().subscribe(response => {
         localStorage.setItem("authorization", response.headers.get("authorization"));
         this.dataService.sendOtpForServices(this.inputUinDetails, "UIN", response.headers.get("authorization")).subscribe(response => {
+          this.showSpinner = false;
           console.log("otp generated");
           if (!response['errors']) {
             this.showOtpMessage();
@@ -171,12 +172,13 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
             this.showErrorMessage(response['errors'][0]["errorMessage"]);
          }
       },
-      error => {
+          error => {
+        this.showSpinner = false
         this.disableVerify = false;
         this.showErrorMessage(response['errors']);
         });
 
-     });
+      });
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.uinErrorMessage === undefined ) {
             this.disableVerify = true;
@@ -194,9 +196,7 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
         this.showSpinner = false;
         console.log("in generateVid" + !response['errors'])
         if (response['errors'] == "") {
-          console.log("in if")
           this.showResponseMessageDialog(response['response']['vid']);
-          //this.router.navigate([".."]);
         } else {
           this.showSendOTP = true;
           this.showResend = false;
@@ -208,7 +208,6 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
           // document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
           this.showErrorMessage(response['errors'][0]["errorMessage"]);
-          //this.router.navigate([".."]);
         } 
       })
 
@@ -263,6 +262,7 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
     this.resultVID = VIDMessage + vid;
     this.showResult = true;
   }
+
   ngOnDestroy(){
      clearInterval(this.timer);
    }

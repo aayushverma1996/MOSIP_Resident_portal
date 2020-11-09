@@ -5,11 +5,11 @@
   font-size: 12px;
   padding-top: 10px;
   padding-bottom: 0px;
-  position: relative;
+  position: fixed;
   bottom: -9px;
   width: 99%;
-  z-index: 0;
-  margin-bottom: 0px;
+  z-index: 1;
+  bottom: 0px;
   background: white;
 }
 

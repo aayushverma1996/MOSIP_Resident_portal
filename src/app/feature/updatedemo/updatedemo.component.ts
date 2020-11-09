@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { copyStyles } from '@angular/animations/browser/src/util';
 import { DataStorageService } from 'src/app/core/services/data-storage.service';
+import { NULL_EXPR } from '@angular/compiler/src/output/output_ast';
+import LanguageFactory from 'src/assets/i18n';
+import { DialougComponent } from 'src/app/shared/dialoug/dialoug.component';
 
 @Component({
   selector: 'app-updatedemo',
@@ -21,6 +24,7 @@ export class UpdatedemoComponent implements OnInit {
   upload:File;
   fileToUpload:File=null;
   fileByteArray:any;
+  dialog: any;
   constructor(private dataService:DataStorageService) { }
 
   ngOnInit() {
@@ -46,7 +50,41 @@ export class UpdatedemoComponent implements OnInit {
     // console.log(this.district);
     // console.log(this.state);
 
-    this.dataService.updateDemographic(this.fileByteArray,this.fileToUpload);
+    this.dataService.updateDemographic(this.fileByteArray,this.fileToUpload).subscribe(response=>{
+      
+      console.log("inUpdateDemo" + !response['errors'])
+      //if (response['errors'] == NULL_EXPR) {
+        //console.log("in if")
+        this.showResponseMessageDialog(response['response']['registrationId']);
+        //this.router.navigate([".."]);
+      //} else {
+        //this.showSendOTP = true;
+        //this.showResend = false;
+        //this.showOTP = false;
+        //this.showVerify = false;
+        //this.showUinDetail = true;
+        //this.inputUinDetails = "";
+        // document.getElementById('timer').style.visibility = 'hidden';
+        // document.getElementById('minutesSpan').innerText = this.minutes;
+        //clearInterval(this.timer);
+        //this.showErrorMessage();
+        //this.router.navigate([".."]);
+     // } 
+    })
+;
+  }
+  showResponseMessageDialog(registrationId:string) {
+    let factory = new LanguageFactory(localStorage.getItem('langCode'));
+    let response = factory.getCurrentlanguage();
+    //let successMessage = response["generateVid"][ "generate-vid_message"];
+     const message = {
+      case: 'MESSAGE',
+      message: "VID is "+registrationId
+    };
+    this.dialog.open(DialougComponent, {
+      width: '350px',
+      data: message
+    });
   }
   getBase64(file) {
     return new Promise((resolve, reject) => {

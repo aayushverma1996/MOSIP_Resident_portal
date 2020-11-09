@@ -85,9 +85,9 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
       this.seconds = '00';
     }
   }
-  btnClick= function () {
-    this.router.navigate(['updateDemo']);
-};
+  //btnClick= function () {
+    //this.router.navigate(['updateDemo']);
+//};
   showVerifyBtn() {
     if (
       this.inputOTP.length ===
@@ -97,7 +97,8 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
       this.showVerify = true;
       this.showResend = false;
       this.disableVerify = false;
-      //(onclick) = "btnClick();";
+      this.updateDemo();
+
     } else {
       console.log("inside else");
       this.disableVerify = true;
@@ -181,7 +182,7 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
         this.showErrorMessage();
         });
       //});
-       this.updateDemo();
+       //this.updateDemo();
       //this.router.navigate(['updatedemo']);
      // just for checking. put this line inside if(!response['error'])
       //
@@ -192,15 +193,20 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
     } else if (this.showVerify && this.errorMessage === undefined ) {
             this.disableVerify = true;
             clearInterval(this.timer);
-            this.updateDemo();   
+            //this.updateDemo();   
       }
     }
 
  updateDemo(){
    console.log("UpdateDemo User Otp");
    this.dataService.updateDemoUserOtp(this.inputDetails,this.inputOTP,this.idType);
+   //this.router.navigate(['updatedemo']);
+   
   }
-
+  updateDemo_new(){
+    console.log("UpdateDemo Html Page");
+    this.router.navigate(['updatedemo']);
+  }
   showOtpMessage() {
     this.inputOTP = '';
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
