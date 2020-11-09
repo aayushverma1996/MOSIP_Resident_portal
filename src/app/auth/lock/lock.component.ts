@@ -160,8 +160,8 @@ export class LockComponent implements OnInit,OnDestroy {
       }
 
 
-      //this.dataService.generateToken().subscribe(response=>{
-        this.dataService.sendOtpForServices(this.inputDetails,this.idType).subscribe(response=>{
+      this.dataService.generateToken().subscribe(response=>{
+        this.dataService.sendOtpForServices(this.inputDetails,this.idType, response.headers.get("authorization")).subscribe(response=>{
           console.log(response);
           console.log("otp generated");
           if (!response['errors']) {
@@ -185,7 +185,7 @@ export class LockComponent implements OnInit,OnDestroy {
         this.disableVerify = false;
         this.showErrorMessage();
       });
-       // });
+   });
     
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.errorMessage === undefined ) {

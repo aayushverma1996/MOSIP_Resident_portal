@@ -1,0 +1,30 @@
+.myDiv {
+  border: 2px solid #fadb10;
+  background-color: #fff5b2;
+  text-align: center;
+  margin-top: 10%;
+  border-radius: 25px;
+  margin-bottom: 7%;
+}
+
+.button_ok {
+  width: 20%;
+  margin-bottom: 2%;
+  background-color: green;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form_wrapper {
+  margin: 4% 0%;
+  line-height: 2.8rem;
+  height: 60vh;
+}

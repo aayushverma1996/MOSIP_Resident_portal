@@ -18,9 +18,12 @@ import { LockComponent } from './lock/lock.component';
 import { UnlockComponent } from './unlock/unlock.component';
 import { AuthHistoryComponent } from './auth-history/auth-history.component';
 
+import { NgxPaginationModule } from 'ngx-pagination';
+import { SuccessComponent } from './success/success.component';
+import { SpinnerCustomComponent } from './spinner-custom/spinner-custom.component';
 
 @NgModule({
-  declarations: [LoginComponent, MainpageComponent, GenerateVidComponent, RevokeVidComponent, RequestUinComponent, RequestEuinComponent, UpdateDemographicComponent, ServiceReqStatusCheckComponent, LockComponent, UnlockComponent, AuthHistoryComponent],
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, AuthRoutingModule, AppRoutingModule, SharedModule]
+  declarations: [LoginComponent, MainpageComponent, GenerateVidComponent, RevokeVidComponent, RequestUinComponent, RequestEuinComponent, UpdateDemographicComponent, ServiceReqStatusCheckComponent, LockComponent, UnlockComponent, AuthHistoryComponent, SuccessComponent, SpinnerCustomComponent],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, AuthRoutingModule, AppRoutingModule, SharedModule, NgxPaginationModule]
 })
 export class AuthModule {}

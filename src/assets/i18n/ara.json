@@ -287,7 +287,8 @@
     "sub_text": "انشاء",
     "sub_text_UID": "رقم التعريف الظاهري",
    "enter_uin":"أدخل UIN",
-   "generate-vid_message":"تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة"
+   "generate-vid_message":"تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة",
+   "vid-success_message":"VID الذي تم إنشاؤه هو :- "
   },
   "revokeVid": {
     "sub_text": "سحب او إبطال",

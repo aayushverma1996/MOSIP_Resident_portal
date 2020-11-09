@@ -15,7 +15,7 @@ import { SharedModule } from './shared/shared.module';
 import { ConfigService } from 'src/app/core/services/config.service';
 import { UpdatedemoComponent } from './feature/updatedemo/updatedemo.component';
 import { FormsModule } from '@angular/forms';
-
+import { ToastrModule } from 'ngx-toastr'; 
 const appInitialization = (appConfig: AppConfigService) => {
   return () => {
     return appConfig.loadAppConfig();
@@ -33,7 +33,8 @@ const appInitialization = (appConfig: AppConfigService) => {
     AuthModule,
     SharedModule,
     FormsModule,
-    NgxPrintModule
+    NgxPrintModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     BookingService,

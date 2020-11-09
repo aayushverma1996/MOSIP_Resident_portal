@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { DialougComponent } from 'src/app/shared/dialoug/dialoug.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatTableDataSource,MatSort,MatPaginator } from '@angular/material';
 import { AuthService } from '../auth.service';
 import { DataStorageService } from 'src/app/core/services/data-storage.service';
 import { RegistrationService } from 'src/app/core/services/registration.service';
 import { ConfigService } from 'src/app/core/services/config.service';
 import * as appConstants from '../../app.constants';
 import LanguageFactory from '../../../assets/i18n';
+import { DataSource } from '@angular/cdk/table';
 
 @Component({
   selector: 'app-auth-history',
@@ -16,6 +17,13 @@ import LanguageFactory from '../../../assets/i18n';
   styleUrls: ['./auth-history.component.css']
 })
 export class AuthHistoryComponent implements OnInit,OnDestroy {
+//trying to implement pagination:::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
+  historyData : Array<any>
+
+  totalRecords: String
+  page :Number=1
+
+//trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
 
   disableBtn = false;
   timer:any ;
@@ -36,6 +44,7 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
   inputDetails = '';
   showDetail = true;
   idType:string
+  showAuthHistoryTable=false;
 
   constructor(
     private authService: AuthService,
@@ -47,9 +56,13 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
     private regService: RegistrationService,
     private configService: ConfigService,
   ) {
+    this.historyData=new Array<any>()
+
   }
 
   ngOnInit() {  
+
+
      this.setTimer();
      this.loadValidationMessages();
      
@@ -57,6 +70,11 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
         this.authService.onLogout();
       }
   }
+//trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
+
+  
+//trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
+
   loadValidationMessages() {
     let langCode=localStorage.getItem('langCode');
     this.selectedLanguage = appConstants.languageMapping[langCode].langName;
@@ -151,8 +169,8 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
         this.timer = setInterval(timerFn, 1000);
       }
 
-        //this.dataService.generateToken().subscribe(response=>{
-          this.dataService.sendOtpForServices(this.inputDetails,this.idType).subscribe(response=>{
+        this.dataService.generateToken().subscribe(response=>{
+          this.dataService.sendOtpForServices(this.inputDetails,this.idType,response.headers.get("authorization")).subscribe(response=>{
              console.log("otp generated");
              console.log(response);
             // if()
@@ -178,7 +196,7 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
             this.disableVerify = false;
             this.showErrorMessage();
           });
-        //});
+        });
       // dynamic update of button text for Resend and Verify
     } else if (this.showVerify && this.errorMessage === undefined ) {
             this.disableVerify = true;
@@ -195,7 +213,17 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
     this.dataService.authHistory(this.inputDetails,this.inputOTP,this.idType).subscribe(response=>{
       console.log(response);
       this.showSpinner = false;
-      
+      //trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
+      this.historyData= response['response']['authHistory'];
+      this.totalRecords=response['response']['authHistory'].length;
+
+      console.log(this.historyData);
+
+      this.showAuthHistoryTable = true;
+      //trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
+
+
+
     });
   }
 
