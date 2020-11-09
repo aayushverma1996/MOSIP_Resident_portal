@@ -288,13 +288,14 @@
     "sub_text_UID": "رقم التعريف الظاهري",
    "enter_uin":"أدخل UIN",
    "generate-vid_message":"تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة",
-   "vid-success_message":"VID الذي تم إنشاؤه هو :- "
+   "vid-success_message":"VID الذي تم إنشاؤه هو "
   },
   "revokeVid": {
     "sub_text": "سحب او إبطال",
     "sub_text_UID": "رقم التعريف الظاهري",
    "enter_uin":"أدخل VID",
-   "revoke-vid_message":"تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة"
+   "revoke-vid_message":"تم إرسال الإخطار إلى تفاصيل الاتصال المقدمة",
+   "revoke_success_message":"تم إبطال ملف VId الذي قدمته بنجاح"
   },
   "servReqStatusCheck": {
     "sub_text": "تحقق من حالة",
@@ -669,10 +670,10 @@
     "reqprintuin":"طلب طباعة UIN",
     "aboutprintuin":"يمكنك طلب تسليم بطاقة UIN عن طريق البريد",
     "aboutprintuin1":"لإنشاء طلب الطباعة ، سيتعين عليك إطعام VID الخاص بك وملء OTP والتحقق من نفسك",
-    "reqeuin":"طلب Euina ",
+    "reqeuin":"طباعة Euina ",
     "abouteuin":"E-UIN هي النسخة الإلكترونية لبطاقة UIN الخاصة بك",
     "abouteuin1":"لإنشاء نسخة إلكترونية من بطاقة VID ، سيتعين عليك إطعام UIN الخاص بك وملء OTP وإثبات نفسك",
-    "Updatedemographic":"تحديث التفاصيل الديموغرافية",
+    "Updatedemographic":"تحديث UIN",
     "aboutdemographic":"يمكن تغيير التفاصيل الديموغرافية مثل الاسم والعنوان والجنس هنا",
     "aboutdemographic1":"لتحديث التفاصيل الديموغرافية ، سيكون عليك إطعام UIN الخاص بك وملء OTP والتحقق من نفسك",
     "unlock":"الغاء القفل",
