@@ -290,10 +290,10 @@
     "reqprintuin":"Request Print UIN",
     "aboutprintuin":"You can request for UIN card to be delivered by post",
     "aboutprintuin1":"To generate to print request, you will have to feed your VID and fill up the OTP and verify yourself",
-    "reqeuin":"Request EUIN",
+    "reqeuin":"Print EUIN",
     "abouteuin":"E-UIN is the electronic copy of your UIN card",
     "abouteuin1":"To generate an E-copy of UIN card, you will have to feed your VID and fill up the OTP and verify yourself",
-    "Updatedemographic":"Update Demographic Details",
+    "Updatedemographic":"Update UIN",
     "aboutdemographic":"Demographic details such as name,address,gender can be changed here",
     "aboutdemographic1":"To Update Demographic Details, you will have to feed your UIN and fill up the OTP and verify yourself",
     "unlock":"Unlock",
@@ -327,13 +327,14 @@
     "sub_text_UID": "Virtual Identification Number",
     "enter_uin":"Enter UIN",
     "generate-vid_message":"Notification has been sent to the provided contact detail(s)",
-    "vid-success_message":"Your generated VID is :- "
+    "vid-success_message":"Your generated VID is "
   },
   "revokeVid":{
     "sub_text": "Revoke",
     "sub_text_UID": "Virtual Identification Number",
     "enter_uin":"Enter VID",
-    "revoke-vid_message":"Notification has been sent to the provided contact detail(s)"
+    "revoke-vid_message":"Notification has been sent to the provided contact detail(s)",
+    "revoke_success_message":"Your provided VId has been revoked successfully."
   },
   "servReqStatusCheck":{
     "sub_text": "Check status of",
