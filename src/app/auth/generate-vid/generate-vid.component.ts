@@ -194,7 +194,6 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
     const auth = localStorage.getItem("authorization")
       this.dataService.generateVid(this.inputUinDetails,this.inputOTP,auth).subscribe(response=>{
         this.showSpinner = false;
-        console.log("in generateVid" + !response['errors'])
         if (response['errors'] == "") {
           this.showResponseMessageDialog(response['response']['vid']);
         } else {
@@ -204,8 +203,8 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
           this.showVerify = false;
           this.showUinDetail = true;
           this.inputUinDetails = "";
-          // document.getElementById('timer').style.visibility = 'hidden';
-          // document.getElementById('minutesSpan').innerText = this.minutes;
+          document.getElementById('timer').style.visibility = 'hidden';
+          document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
           this.showErrorMessage(response['errors'][0]["errorMessage"]);
         } 
@@ -218,15 +217,6 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let otpmessage = response['authCommonText']['otpSent'];
-  
-    // const message = {
-    //   case: 'MESSAGE',
-    //   message: otpmessage
-    // };
-    // this.dialog.open(DialougComponent, {
-    //   width: '350px',
-    //   data: message
-    // });
     this.toast.success(otpmessage, "Success", {positionClass:"my-toast-class",progressBar:true} );
   }
 
@@ -234,14 +224,6 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let errormessage = response['error']['error'];
-    // const message = {
-    //   case: 'MESSAGE',
-    //   message: errormessage
-    // };
-    // this.dialog.open(DialougComponent, {
-    //   width: '350px',
-    //   data: message
-    // });
     this.toast.error(errMsg,"Error", {positionClass:"my-toast-class",progressBar:true})
   }
 
@@ -250,14 +232,6 @@ export class GenerateVidComponent implements OnInit,OnDestroy{
     let response = factory.getCurrentlanguage();
     let successMessage = response["generateVid"]["generate-vid_message"];
     let VIDMessage = response["generateVid"]["vid-success_message"]
-    //  const message = {
-    //   case: 'MESSAGE',
-    //   message: "VID is "+vid
-    // };
-    // this.dialog.open(DialougComponent, {
-    //   width: '350px',
-    //   data: message
-    // });
     this.toast.success(successMessage, "Success", { positionClass: "my-toast-class", progressBar: true });
     this.resultVID = VIDMessage + vid;
     this.showResult = true;

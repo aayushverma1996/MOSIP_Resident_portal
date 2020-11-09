@@ -10,6 +10,7 @@ import { ConfigService } from 'src/app/core/services/config.service';
 import * as appConstants from '../../app.constants';
 import LanguageFactory from '../../../assets/i18n';
 import { DataSource } from '@angular/cdk/table';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-auth-history',
@@ -55,6 +56,7 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
     private dataService: DataStorageService,
     private regService: RegistrationService,
     private configService: ConfigService,
+    private toast: ToastrService
   ) {
     this.historyData=new Array<any>()
 
@@ -168,13 +170,12 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
-
+      this.showSpinner = true;
         this.dataService.generateToken().subscribe(response=>{
           this.dataService.sendOtpForServices(this.inputDetails,this.idType,response.headers.get("authorization")).subscribe(response=>{
              console.log("otp generated");
              console.log(response);
-            // if()
-            // this.showOtpMessage();
+            this.showSpinner = false;
             if (!response['errors']) {
                 this.showOtpMessage();
             } else {
@@ -187,14 +188,15 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
             document.getElementById('timer').style.visibility = 'hidden';
             document.getElementById('minutesSpan').innerText = this.minutes;
             clearInterval(this.timer);
-            this.showErrorMessage();
+            this.showErrorMessage(response["errors"][0]["errorMessage"]);
             }
 
 
           },
           error => {
             this.disableVerify = false;
-            this.showErrorMessage();
+            this.showSpinner = false;
+            this.showErrorMessage("");
           });
         });
       // dynamic update of button text for Resend and Verify
@@ -213,14 +215,28 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
     this.dataService.authHistory(this.inputDetails,this.inputOTP,this.idType).subscribe(response=>{
       console.log(response);
       this.showSpinner = false;
-      //trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
-      this.historyData= response['response']['authHistory'];
-      this.totalRecords=response['response']['authHistory'].length;
+      if (!response['errors']) {
+        //trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
+        this.historyData = response['response']['authHistory'];
+        this.totalRecords = response['response']['authHistory'].length;
 
-      console.log(this.historyData);
+        console.log(this.historyData);
 
-      this.showAuthHistoryTable = true;
-      //trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
+        this.showAuthHistoryTable = true;
+        //trying to implement pagination::::::::::::::::::::::::::::::::::::::::::::::::::::;
+      } else {
+        this.showSpinner = false;
+        this.showSendOTP = true;
+        this.showResend = false;
+        this.showOTP = false;
+        this.showVerify = false;
+        this.showDetail = true;
+        this.inputDetails = "";
+        document.getElementById('timer').style.visibility = 'hidden';
+        document.getElementById('minutesSpan').innerText = this.minutes;
+        clearInterval(this.timer);
+        this.showErrorMessage(response["errors"][0]["message"]);
+      }
 
 
 
@@ -232,29 +248,41 @@ export class AuthHistoryComponent implements OnInit,OnDestroy {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let otpmessage = response['authCommonText']['otpSent'];
-    const message = {
-      case: 'MESSAGE',
-      message: otpmessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    // const message = {
+    //   case: 'MESSAGE',
+    //   message: otpmessage
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+    this.toast.success(otpmessage, "Success", {positionClass:"my-toast-class",progressBar:true} );
+
   }
 
 
-  showErrorMessage() {
+  showErrorMessage(errMsg:string) {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let errormessage = response['error']['error'];
-    const message = {
-      case: 'MESSAGE',
-      message: errormessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    // const message = {
+    //   case: 'MESSAGE',
+    //   message: errormessage
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+     if (errMsg == "")
+    {
+       this.toast.error(errormessage,"Error", {positionClass:"my-toast-class",progressBar:true})
+
+    }
+    else
+    {
+       this.toast.error(errMsg,"Error", {positionClass:"my-toast-class",progressBar:true})
+      }
+   
   }
   ngOnDestroy(){
     // console.log("component changed");

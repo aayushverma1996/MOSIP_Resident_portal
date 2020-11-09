@@ -9,6 +9,8 @@ import { RegistrationService } from 'src/app/core/services/registration.service'
 import { ConfigService } from 'src/app/core/services/config.service';
 import * as appConstants from '../../app.constants';
 import LanguageFactory from '../../../assets/i18n';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-unlock',
@@ -51,6 +53,8 @@ idType:string;
     private dataService: DataStorageService,
     private regService: RegistrationService,
     private configService: ConfigService,
+    private toast: ToastrService
+
   ) {
   }
 
@@ -154,13 +158,18 @@ idType:string;
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
+
+      this.showSpinner=true;
+
       this.dataService.generateToken().subscribe(response=>{
 
         this.dataService.sendOtpForServices(this.inputDetails,this.idType,response.headers.get("authorization")).subscribe(response=>{
           console.log("otp generated");
           console.log(response);
+          this.showSpinner=true;
 
           if (!response['errors']) {
+
             this.showOtpMessage();
         } else {
           this.showSendOTP = true;
@@ -172,15 +181,17 @@ idType:string;
             document.getElementById('timer').style.visibility = 'hidden';
             document.getElementById('minutesSpan').innerText = this.minutes;
             clearInterval(this.timer);
-            this.showErrorMessage();
+            this.showErrorMessage(response['errors']);
             
         }
 
 
       },
       error => {
+        this.showSpinner=true;
+
         this.disableVerify = false;
-        this.showErrorMessage();
+        this.showErrorMessage(response['errors']);
         });
       });
       // dynamic update of button text for Resend and Verify
@@ -208,72 +219,129 @@ idType:string;
         console.log(response);
         this.showSpinner = false;
         if (!response['errors']) {
-          this.showResponseMessageDialog();
+          this.showResponseMessageDialog(response['response']['vid']);
           this.router.navigate(["/"]);
 
         } else {
-          this.showSendOTP = true;
-          this.showResend = false;
-          this.showOTP = false;
-          this.showVerify = false;
-          this.showDetail = true;
-          this.inputDetails = "";
+          // this.showSendOTP = true;
+          // this.showResend = false;
+          // this.showOTP = false;
+          // this.showVerify = false;
+          // this.showDetail = true;
+          // this.inputDetails = "";
           // document.getElementById('timer').style.visibility = 'hidden';
           // document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
-          this.showErrorMessage();
-          this.router.navigate(["/"]);
+          this.showErrorMessage(response['errors'][0]["errorMessage"]);
+         // this.router.navigate(["/"]);
         }
       });
     //});
   }
+
+  // showOtpMessage() {
+  //   this.inputOTP = '';
+  //   let factory = new LanguageFactory(localStorage.getItem('langCode'));
+  //   let response = factory.getCurrentlanguage();
+  //   let otpmessage = response['authCommonText']['otpSent'];
+  //   const message = {
+  //     case: 'MESSAGE',
+  //     message: otpmessage
+  //   };
+  //   this.dialog.open(DialougComponent, {
+  //     width: '350px',
+  //     data: message
+  //   });
+  // }
+
+  // showResponseMessageDialog() {
+  //   let factory = new LanguageFactory(localStorage.getItem('langCode'));
+  //   let response = factory.getCurrentlanguage();
+  //   let successMessage = response["unlock"][ "unlock_success"];
+  //    const message = {
+  //     case: 'MESSAGE',
+  //     message: successMessage
+  //   };
+  //   this.dialog.open(DialougComponent, {
+  //     width: '350px',
+  //     data: message
+  //   });
+  // }
+
+  // showErrorMessage() {
+  //   let factory = new LanguageFactory(localStorage.getItem('langCode'));
+  //   let response = factory.getCurrentlanguage();
+  //   let errormessage = response['error']['error'];
+  //   const message = {
+  //     case: 'MESSAGE',
+  //     message: errormessage
+  //   };
+  //   this.dialog.open(DialougComponent, {
+  //     width: '350px',
+  //     data: message
+  //   });
+  // }
+
+  // ngOnDestroy(){
+  //   clearInterval(this.timer);
+  // }
+
 
   showOtpMessage() {
     this.inputOTP = '';
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let otpmessage = response['authCommonText']['otpSent'];
-    const message = {
-      case: 'MESSAGE',
-      message: otpmessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+  
+    // const message = {
+    //   case: 'MESSAGE',
+    //   message: otpmessage
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+    this.toast.success(otpmessage, "Success", {positionClass:"my-toast-class",progressBar:true} );
   }
 
-  showResponseMessageDialog() {
-    let factory = new LanguageFactory(localStorage.getItem('langCode'));
-    let response = factory.getCurrentlanguage();
-    let successMessage = response["unlock"][ "unlock_success"];
-     const message = {
-      case: 'MESSAGE',
-      message: successMessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
-  }
-
-  showErrorMessage() {
+  showErrorMessage(errMsg:string) {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let errormessage = response['error']['error'];
-    const message = {
-      case: 'MESSAGE',
-      message: errormessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    // const message = {
+    //   case: 'MESSAGE',
+    //   message: errormessage
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+    this.toast.error(errMsg,"Error", {positionClass:"my-toast-class",progressBar:true})
+  }
+
+  showResponseMessageDialog(vid:string) {
+    let factory = new LanguageFactory(localStorage.getItem('langCode'));
+    let response = factory.getCurrentlanguage();
+    let successMessage = response["unlock"][ "unlock_success"];
+    //let VIDMessage = response["generateVid"]["vid-success_message"]
+    //  const message = {
+    //   case: 'MESSAGE',
+    //   message: "VID is "+vid
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+    this.toast.success(successMessage, "Success", { positionClass: "my-toast-class", progressBar: true });
+   // this.resultVID = VIDMessage + vid;
+    //this.showResult = true;
   }
 
   ngOnDestroy(){
-    clearInterval(this.timer);
-  }
-
-
+     clearInterval(this.timer);
+   }
 }
+
+
+
+

@@ -9,6 +9,7 @@ import { RegistrationService } from 'src/app/core/services/registration.service'
 import { ConfigService } from 'src/app/core/services/config.service';
 import * as appConstants from '../../app.constants';
 import LanguageFactory from '../../../assets/i18n';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-service-req-status-check',
@@ -36,8 +37,8 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
   validationMessages = {};
   inputDetails = '';
   showDetail = true;
-
-
+  showResult = false;
+  resultText = "";
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -47,6 +48,7 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
     private dataService: DataStorageService,
     private regService: RegistrationService,
     private configService: ConfigService,
+    private toast:ToastrService
   ) {
   }
 
@@ -92,19 +94,22 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
       this.inputOTP.length ===
       Number(this.configService.getConfigByKey(appConstants.CONFIG_KEYS.mosip_kernel_otp_default_length))
     ) {
-      this.showVerify = true;
-      this.showResend = false;
+        this.showVerify = true;
+        this.showResend = false;
+        this.disableVerify = false;
     } else {
-      this.showResend = true;
-      this.showVerify = false;
+       this.disableVerify = true;
     }
   }
   submit(): void {
+    
     if ((this.showSendOTP || this.showResend) && this.errorMessage === undefined )  {
-      this.inputOTP = '';
-      this.showResend = true;
+       this.inputOTP = '';
+      this.showResend = false;
       this.showOTP = true;
       this.showSendOTP = false;
+      this.showVerify = true;
+      this.disableVerify = true;
      // this.showContactDetails = false;
       this.showDetail = false;
       console.log("inside submit111");
@@ -147,19 +152,30 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
-        this.dataService.generateToken().subscribe(response=>{
-        this.dataService.sendOtpForServices(this.inputDetails,"RID",response.headers.get("authorization")).subscribe(response=>{
+      
+      this.showSpinner = true;
+      this.dataService.generateToken().subscribe(response=>{
+        this.dataService.sendOtpForServices(this.inputDetails,"RID",response.headers.get("Authorization")).subscribe(response=>{
+
           console.log("otp generated");
+          this.showSpinner = false;
           if (!response['errors']) {
             this.showOtpMessage();
         } else {
-          this.disableVerify = false;
-          this.showOtpMessage();
+          this.showSendOTP = true;
+          this.showResend = false;
+          this.showOTP = false;
+          this.showVerify = false;
+          document.getElementById('timer').style.visibility = 'hidden';
+          document.getElementById('minutesSpan').innerText = this.minutes;
+          clearInterval(this.timer);
+          this.showErrorMessage(response["errors"][0]["errorMessage"]);
         }
       },
-      error => {
-        this.disableVerify = false;
-        this.showErrorMessage();
+          error => {
+           this.showSpinner = false;
+           this.disableVerify = false;
+           this.showErrorMessage(response['errors']);
         });
       });
       // dynamic update of button text for Resend and Verify
@@ -172,8 +188,26 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
 }
   servReqStatusCheck(){
     console.log("Service Request Status Check");
+    this.showSpinner = true;
     this.dataService.serviceRequest(this.inputDetails).subscribe(response=>{
       console.log(response);
+      this.showSpinner = false;
+      if (!response['errors']) {
+        this.showResponseMessageDialog(response["response"]["ridStatus"]);
+          
+        } else {
+          this.showSendOTP = true;
+          this.showResend = false;
+          this.showOTP = false;
+          this.showVerify = false;
+          this.showDetail = true;
+          this.inputDetails = "";
+          // document.getElementById('timer').style.visibility = 'hidden';
+          // document.getElementById('minutesSpan').innerText = this.minutes;
+          clearInterval(this.timer);
+          this.showErrorMessage(response["errors"][0]["errorMessage"]);
+        
+        }
     })
   }
 
@@ -182,17 +216,34 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let otpmessage = response['authCommonText']['otpSent'];
-    const message = {
-      case: 'MESSAGE',
-      message: otpmessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    // const message = {
+    //   case: 'MESSAGE',
+    //   message: otpmessage
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+    this.toast.success(otpmessage, "Success", {positionClass:"my-toast-class",progressBar:true} );
   }
 
-  showErrorMessage() {
+  showResponseMessageDialog(msg:string) {
+    let factory = new LanguageFactory(localStorage.getItem('langCode'));
+    let response = factory.getCurrentlanguage();
+    let successMessage = response["unlock"][ "unlock_success"];
+    //  const message = {
+    //   case: 'MESSAGE',
+    //   message: successMessage
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+    this.resultText = "Your service request is in " + msg + " phase."
+    this.showResult = true;
+  }
+
+  showErrorMessage(errMsg:string) {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let errormessage = response['error']['error'];
