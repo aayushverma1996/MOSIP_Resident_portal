@@ -127,8 +127,8 @@ idType:string;
         if (secValue === 0) {
           secValue = 60;
           if (minValue === 0) {
-            // redirecting to initial phase on completion of timer
-           // this.showContactDetails = true;
+          // redirecting to initial phase on completion of timer
+          // this.showContactDetails = true;
             this.showSendOTP = false;
             this.showResend = true;
             this.showOTP = false;
@@ -238,53 +238,6 @@ idType:string;
       });
     //});
   }
-
-  // showOtpMessage() {
-  //   this.inputOTP = '';
-  //   let factory = new LanguageFactory(localStorage.getItem('langCode'));
-  //   let response = factory.getCurrentlanguage();
-  //   let otpmessage = response['authCommonText']['otpSent'];
-  //   const message = {
-  //     case: 'MESSAGE',
-  //     message: otpmessage
-  //   };
-  //   this.dialog.open(DialougComponent, {
-  //     width: '350px',
-  //     data: message
-  //   });
-  // }
-
-  // showResponseMessageDialog() {
-  //   let factory = new LanguageFactory(localStorage.getItem('langCode'));
-  //   let response = factory.getCurrentlanguage();
-  //   let successMessage = response["unlock"][ "unlock_success"];
-  //    const message = {
-  //     case: 'MESSAGE',
-  //     message: successMessage
-  //   };
-  //   this.dialog.open(DialougComponent, {
-  //     width: '350px',
-  //     data: message
-  //   });
-  // }
-
-  // showErrorMessage() {
-  //   let factory = new LanguageFactory(localStorage.getItem('langCode'));
-  //   let response = factory.getCurrentlanguage();
-  //   let errormessage = response['error']['error'];
-  //   const message = {
-  //     case: 'MESSAGE',
-  //     message: errormessage
-  //   };
-  //   this.dialog.open(DialougComponent, {
-  //     width: '350px',
-  //     data: message
-  //   });
-  // }
-
-  // ngOnDestroy(){
-  //   clearInterval(this.timer);
-  // }
 
 
   showOtpMessage() {
