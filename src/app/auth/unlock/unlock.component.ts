@@ -166,7 +166,7 @@ idType:string;
         this.dataService.sendOtpForServices(this.inputDetails,this.idType,response.headers.get("authorization")).subscribe(response=>{
           console.log("otp generated");
           console.log(response);
-          this.showSpinner=true;
+          this.showSpinner=false;
 
           if (!response['errors']) {
 
@@ -188,7 +188,7 @@ idType:string;
 
       },
       error => {
-        this.showSpinner=true;
+        this.showSpinner=false;
 
         this.disableVerify = false;
         this.showErrorMessage(response['errors']);
@@ -209,7 +209,7 @@ idType:string;
       if(this.bioFace)
         auth.push('bio-FACE');
       if(this.bioFir)
-        auth.push('bio-FMR');
+        auth.push('bio-Finger');
       if(this.bioIir)
         auth.push('bio-Iris');
 
