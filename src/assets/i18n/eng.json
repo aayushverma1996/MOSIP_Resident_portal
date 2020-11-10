@@ -358,7 +358,9 @@
     "sub_text": "Update",
     "sub_text_UID": "Demographic Details",
     "enter_uin":"Enter UIN",
-    "enter_vid":"Enter VID"
+    "enter_vid":"Enter VID",
+    "update_demo_message":"Notification has been sent to the provided contact detail(s)",
+    "update_demo_success_message":"Request id is : "
   },
   "lock":{
     "sub_text": "Lock",
