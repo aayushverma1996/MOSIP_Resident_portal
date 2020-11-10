@@ -211,9 +211,10 @@ export class LockComponent implements OnInit,OnDestroy {
       if(this.bioFace)
         auth.push('bio-FACE');
       if(this.bioFir)
-        auth.push('bio-FID');
+        auth.push('bio-Finger');
       if(this.bioIir)
         auth.push('bio-Iris');
+        
 
     this.showSpinner = true;
       this.dataService.lockUIN(this.inputDetails,this.inputOTP,auth,this.idType).subscribe(response=>{
