@@ -9,6 +9,7 @@ import { RegistrationService } from 'src/app/core/services/registration.service'
 import { ConfigService } from 'src/app/core/services/config.service';
 import * as appConstants from '../../app.constants';
 import LanguageFactory from '../../../assets/i18n';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-update-demographic',
@@ -37,6 +38,7 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
   showDetail = true;
   idType:string;
 
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -46,6 +48,7 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
     private dataService: DataStorageService,
     private regService: RegistrationService,
     private configService: ConfigService,
+    private toast: ToastrService
   ) {
   }
 
@@ -112,7 +115,7 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
       this.showOTP = true;
       this.showSendOTP = false;
       this.showVerify = true;
-      this.disableVerify = false;
+      this.disableVerify = true;
      // this.showContactDetails = false;
       this.showDetail = false;
       console.log("inside submit111");
@@ -155,8 +158,11 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
         document.getElementById('timer').style.visibility = 'visible';
         this.timer = setInterval(timerFn, 1000);
       }
+        this.showSpinner = true;
         this.dataService.generateToken().subscribe(response=>{
+          localStorage.setItem("authorization", response.headers.get("authorization"));
         this.dataService.sendOtpForServices(this.inputDetails,this.idType,response.headers.get("authorization")).subscribe(response=>{
+          this.showSpinner = false;
           console.log("otp generated");
           if (!response['errors']) {
             this.showOtpMessage();
@@ -171,15 +177,16 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
           document.getElementById('timer').style.visibility = 'hidden';
           document.getElementById('minutesSpan').innerText = this.minutes;
           clearInterval(this.timer);
-          this.showErrorMessage();
+          this.showErrorMessage(response['errors'][0]["errorMessage"]);
        
           //this.disableVerify = false;
           //this.showOtpMessage();
         }
       },
       error => {
+        this.showSpinner = false
         this.disableVerify = false;
-        this.showErrorMessage();
+        this.showErrorMessage(response['errors']);
         });
       });
        //this.updateDemo();
@@ -198,43 +205,64 @@ export class UpdateDemographicComponent implements OnInit,OnDestroy {
     }
 
  updateDemo(){
+  //this.showSpinner = true;
    console.log("UpdateDemo User Otp");
+   //const auth = localStorage.getItem("authorization")
    this.dataService.updateDemoUserOtp(this.inputDetails,this.inputOTP,this.idType);
+   //this.showSpinner = false;
+   //if (response['errors'] == "") {
+    //this.showResponseMessageDialog(response['response']['vid']);
+  //} else {
+    //this.showSendOTP = true;
+    //this.showResend = false;
+    //this.showOTP = false;
+    //this.showVerify = false;
+    //this.showDetail = true;
+    //this.inputDetails = "";
+    document.getElementById('timer').style.visibility = 'hidden';
+    document.getElementById('minutesSpan').innerText = this.minutes;
+    clearInterval(this.timer);
+    //this.showErrorMessage(response['errors'][0]["errorMessage"]);
+  }
    //this.router.navigate(['updatedemo']);
    
-  }
   updateDemo_new(){
     console.log("UpdateDemo Html Page");
     this.router.navigate(['updatedemo']);
   }
   showOtpMessage() {
+    console.log("otp message");
     this.inputOTP = '';
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let otpmessage = response['authCommonText']['otpSent'];
-    const message = {
-      case: 'MESSAGE',
-      message: otpmessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    console.log("here");
+    this.toast.success(otpmessage, "Success", {positionClass:"my-toast-class",progressBar:true} );
+    //const message = {
+      //case: 'MESSAGE',
+      //message: otpmessage
+   // };
+    //this.dialog.open(DialougComponent, {
+      //width: '350px',
+      //data: message
+    //});
   }
 
-  showErrorMessage() {
+  showErrorMessage(errMsg:string) {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let errormessage = response['error']['error'];
-    const message = {
-      case: 'MESSAGE',
-      message: errormessage
-    };
-    this.dialog.open(DialougComponent, {
-      width: '350px',
-      data: message
-    });
+    this.toast.error(errMsg,"Error", {positionClass:"my-toast-class",progressBar:true})
+    //const message = {
+      //case: 'MESSAGE',
+      //message: errormessage
+    //};
+    //this.dialog.open(DialougComponent, {
+      //width: '350px',
+      //data: message
+    //});
   }
+  
   ngOnDestroy(){
     // console.log("component changed");
      clearInterval(this.timer);
