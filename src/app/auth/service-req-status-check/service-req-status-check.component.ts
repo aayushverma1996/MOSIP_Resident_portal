@@ -22,6 +22,7 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
   disableBtn = false;
   timer:any ;
   inputOTP: string;
+  showServiceStatusCheck = true;
   showSendOTP = true;
   showResend = false;
   showVerify = false;
@@ -94,10 +95,12 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
       this.inputOTP.length ===
       Number(this.configService.getConfigByKey(appConstants.CONFIG_KEYS.mosip_kernel_otp_default_length))
     ) {
+        console.log("inside if");
         this.showVerify = true;
         this.showResend = false;
         this.disableVerify = false;
     } else {
+      console.log("inside else");
        this.disableVerify = true;
     }
   }
@@ -190,6 +193,7 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
 }
   servReqStatusCheck(){
     console.log("Service Request Status Check");
+    console.log(this.inputDetails);
     this.showSpinner = true;
     this.dataService.serviceRequest(this.inputDetails).subscribe(response=>{
       console.log(response);
@@ -232,7 +236,7 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
   showResponseMessageDialog(msg:string) {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
-    let successMessage = response["unlock"][ "unlock_success"];
+    //let successMessage = response["unlock"][ "unlock_success"];
     //  const message = {
     //   case: 'MESSAGE',
     //   message: successMessage
@@ -241,7 +245,9 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
     //   width: '350px',
     //   data: message
     // });
+
     this.resultText = "Your service request status : " + msg
+
     this.showResult = true;
   }
 
@@ -258,6 +264,7 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
     //   data: message
     // });
     this.toast.error(errormessage,"Error", {positionClass:"my-toast-class",progressBar:true})
+
   }
   ngOnDestroy(){
     // console.log("component changed");
