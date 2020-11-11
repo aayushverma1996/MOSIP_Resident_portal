@@ -309,7 +309,8 @@
     "otp_valid_label": "Valid for",
     "vid":"Enter VID",
     "uin":"Enter UIN",
-    "otpSent": "OTP sent to your registered Email and Mobile number"
+    "otpSent": "OTP sent to your registered Email and Mobile number",
+    "action_check_status": "Check Status"
   },
   "authValidationMessages":{
     "invalidEmail": "Invalid email id Entered",
