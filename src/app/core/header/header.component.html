@@ -28,7 +28,7 @@
   <mat-sidenav-content>
     
     <mat-toolbar class="head">
-    <div style="margin-left:5px; width:40%"><a routerLink="/" class="logo"><img src="assets\logo-final.png"
+    <div style="margin-left:5px; width:35%"><a routerLink="/" class="logo"><img src="assets\logo-final.png"
           class="header--logo" /></a></div><h1 class="mat-headline">{{'header.mainheading' | translate}} </h1>
       <span class="spacer"></span><button class="mat-button" (click)="onLogoClick()" >{{'header.home' | translate}}</button></mat-toolbar>
     
@@ -56,6 +56,7 @@
    
       <mat-nav-list class="list-item">
         <!--<a mat-list-item routerLink="/residentServices/0">{{ 'header.link_pre-registration' | translate }}</a>-->
+        <a mat-list-item routerLink="/">{{'header.home' | translate}}</a>
         <a mat-list-item routerLink="/about-us" >{{ 'header.link_about' | translate }}</a>
         <a mat-list-item routerLink="/faq">{{ 'header.link_faq' | translate }}</a>
         <a mat-list-item routerLink="/contact">{{ 'header.link_contact' | translate }}</a>
