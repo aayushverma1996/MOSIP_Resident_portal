@@ -27,7 +27,7 @@ export const IDS = {
   residentTokenId:'mosip.authentication.useridPwd',
   printUIN: 'mosip.resident.printuin',
   getEUIN: 'mosip.resident.euin',
-  serviceRequest:'mosip.resident.uinstatus',
+  serviceRequest:'mosip.resident.checkstatus',
   authHistory:'mosip.resident.authhistory',
   lockUIN:'mosip.resident.authlock',
   unlockUIN:'mosip.resident.authunlock',
