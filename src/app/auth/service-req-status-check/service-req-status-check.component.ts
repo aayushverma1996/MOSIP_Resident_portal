@@ -106,76 +106,74 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
   }
   submit(): void {
     
-    // // if ((this.showSendOTP || this.showResend) && this.errorMessage === undefined )  {
-    // //    this.inputOTP = '';
-    // //   this.showResend = false;
-    // //   this.showOTP = true;
-    // //   this.showSendOTP = false;
-    // //   this.showVerify = true;
-    // //   this.disableVerify = true;
-    // //  // this.showContactDetails = false;
-    // //   this.showDetail = false;
-    // //   console.log("inside submit111");
+    if ((this.showSendOTP || this.showResend) && this.errorMessage === undefined )  {
+      this.servReqStatusCheck();
+    //    this.inputOTP = '';
+    //   this.showResend = false;
+    //   this.showOTP = true;
+    //   this.showSendOTP = false;
+    //   this.showVerify = true;
+    //   this.disableVerify = true;
+    //  // this.showContactDetails = false;
+    //   this.showDetail = false;
+    //   console.log("inside submit111");
 
-    // //   const timerFn = () => {
-    // //     let secValue = Number(document.getElementById('secondsSpan').innerText);
-    // //     const minValue = Number(document.getElementById('minutesSpan').innerText);
+    //   const timerFn = () => {
+    //     let secValue = Number(document.getElementById('secondsSpan').innerText);
+    //     const minValue = Number(document.getElementById('minutesSpan').innerText);
 
-    // //     if (secValue === 0) {
-    // //       secValue = 60;
-    // //       if (minValue === 0) {
-    // //         // redirecting to initial phase on completion of timer
-    // //        // this.showContactDetails = true;
-    // //         this.showSendOTP = true;
-    // //         this.showResend = false;
-    // //         this.showOTP = false;
-    // //         this.showVerify = false;
-    // //         this.showDetail = true;
-    // //         document.getElementById('minutesSpan').innerText = this.minutes;
-    // //         document.getElementById('timer').style.visibility = 'hidden';
-    // //         clearInterval(this.timer);
-    // //         return;
-    // //       }
-    // //       document.getElementById('minutesSpan').innerText = '0' + (minValue - 1);
-    // //     }
+    //     if (secValue === 0) {
+    //       secValue = 60;
+    //       if (minValue === 0) {
+    //         // redirecting to initial phase on completion of timer
+    //        // this.showContactDetails = true;
+    //         this.showSendOTP = true;
+    //         this.showResend = false;
+    //         this.showOTP = false;
+    //         this.showVerify = false;
+    //         this.showDetail = true;
+    //         document.getElementById('minutesSpan').innerText = this.minutes;
+    //         document.getElementById('timer').style.visibility = 'hidden';
+    //         clearInterval(this.timer);
+    //         return;
+    //       }
+    //       document.getElementById('minutesSpan').innerText = '0' + (minValue - 1);
+    //     }
 
-    // //     if (secValue === 10 || secValue < 10) {
-    // //       document.getElementById('secondsSpan').innerText = '0' + --secValue;
-    // //     } else {
-    // //       document.getElementById('secondsSpan').innerText = --secValue + '';
-    // //     }
-    // //   };
+    //     if (secValue === 10 || secValue < 10) {
+    //       document.getElementById('secondsSpan').innerText = '0' + --secValue;
+    //     } else {
+    //       document.getElementById('secondsSpan').innerText = --secValue + '';
+    //     }
+    //   };
 
-    // //   // update of timer value on click of resend
-    // //   if (document.getElementById('timer').style.visibility === 'visible') {
-    // //     document.getElementById('secondsSpan').innerText = this.seconds;
-    // //     document.getElementById('minutesSpan').innerText = this.minutes;
-    // //   } else {
-    // //     // initial set up for timer
-    // //     document.getElementById('timer').style.visibility = 'visible';
-    // //     this.timer = setInterval(timerFn, 1000);
-    // //   }
+    //   // update of timer value on click of resend
+    //   if (document.getElementById('timer').style.visibility === 'visible') {
+    //     document.getElementById('secondsSpan').innerText = this.seconds;
+    //     document.getElementById('minutesSpan').innerText = this.minutes;
+    //   } else {
+    //     // initial set up for timer
+    //     document.getElementById('timer').style.visibility = 'visible';
+    //     this.timer = setInterval(timerFn, 1000);
+    //   }
       
-    // //   this.showSpinner = true;
-    // //   this.dataService.generateToken().subscribe(response=>{
-    // //     localStorage.setItem("authorization", response.headers.get("authorization"));
-    // //     this.dataService.sendOtpForServices(this.inputDetails,"RID",response.headers.get("Authorization")).subscribe(response=>{
+    //   this.showSpinner = true;
+    //   this.dataService.generateToken().subscribe(response=>{
+    //     this.dataService.sendOtpForServices(this.inputDetails,"RID",response.headers.get("Authorization")).subscribe(response=>{
 
-    // //       console.log("otp generated");
-    // //       this.showSpinner = false;
-    // //       if (!response['errors']) {
-    // //         this.showOtpMessage();
-    // //     } else {
-    // //       this.showSendOTP = true;
-    // //       this.showResend = false;
-    // //       this.showOTP = false;
-    // //       this.showVerify = false;
-    // //       this.showDetail = true;
-    // //       this.inputDetails = "";
-    // //       document.getElementById('timer').style.visibility = 'hidden';
-    // //       document.getElementById('minutesSpan').innerText = this.minutes;
-    // //       clearInterval(this.timer);
-    // //       this.showErrorMessage(response["errors"][0]["errorMessage"]);
+    //       console.log("otp generated");
+    //       this.showSpinner = false;
+    //       if (!response['errors']) {
+    //         this.showOtpMessage();
+    //     } else {
+    //       this.showSendOTP = true;
+    //       this.showResend = false;
+    //       this.showOTP = false;
+    //       this.showVerify = false;
+    //       document.getElementById('timer').style.visibility = 'hidden';
+    //       document.getElementById('minutesSpan').innerText = this.minutes;
+    //       clearInterval(this.timer);
+    //       this.showErrorMessage(response["errors"][0]["errorMessage"]);
     //     }
     //   },
     //       error => {
@@ -185,11 +183,12 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
     //     });
     //   });
     //   // dynamic update of button text for Resend and Verify
-    // } else if (this.showVerify && this.errorMessage === undefined ) {
+     } 
+     //else if (this.showVerify && this.errorMessage === undefined ) {
     //         this.disableVerify = true;
     //         clearInterval(this.timer);
-               this.servReqStatusCheck();
-     // }
+    //         this.servReqStatusCheck();
+      // }
   
 }
   servReqStatusCheck(){
@@ -246,8 +245,9 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
     //   width: '350px',
     //   data: message
     // });
-    
-      this.resultText = "Your service request : " + msg
+
+    this.resultText = "Your service request status : " + msg
+
     this.showResult = true;
   }
 
@@ -255,15 +255,16 @@ export class ServiceReqStatusCheckComponent implements OnInit,OnDestroy {
     let factory = new LanguageFactory(localStorage.getItem('langCode'));
     let response = factory.getCurrentlanguage();
     let errormessage = response['error']['error'];
-    this.toast.error(errMsg,"Error", {positionClass:"my-toast-class",progressBar:true})
-    //const message = {
-      //case: 'MESSAGE',
-      //message: errormessage
-    //};
-    //this.dialog.open(DialougComponent, {
-      //width: '350px',
-      //data: message
-    //});
+    // const message = {
+    //   case: 'MESSAGE',
+    //   message: errormessage
+    // };
+    // this.dialog.open(DialougComponent, {
+    //   width: '350px',
+    //   data: message
+    // });
+    this.toast.error(errormessage,"Error", {positionClass:"my-toast-class",progressBar:true})
+
   }
   ngOnDestroy(){
     // console.log("component changed");
