@@ -304,6 +304,7 @@
     "text": "Quick & Easy steps",
     "label_otp": "Enter OTP",
     "action_send": "Send OTP",
+    "action_check_status":"Check Status",
     "action_resend": "Resend",
     "action_verify": "Verify",
     "otp_valid_label": "Valid for",
